@@ -40,9 +40,9 @@ import { spawnWslSidecar } from "./wsl/sidecar"
 import { migrate } from "./migrate"
 
 const APP_NAMES: Record<string, string> = {
-  dev: "OpenCode Dev",
-  beta: "OpenCode Beta",
-  prod: "OpenCode",
+  dev: "totem dev",
+  beta: "totem beta",
+  prod: "totem",
 }
 const APP_IDS: Record<string, string> = {
   dev: "ai.opencode.desktop.dev",

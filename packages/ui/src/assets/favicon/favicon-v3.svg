@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512"><svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="512" height="512" fill="#131010"></rect>
-<path d="M320 224V352H192V224H320Z" fill="#5A5858"></path>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M384 416H128V96H384V416ZM320 160H192V352H320V160Z" fill="white"></path>
-</svg><style>@media (prefers-color-scheme: light) { :root { filter: none; } }
-@media (prefers-color-scheme: dark) { :root { filter: none; } }
-</style></svg>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="512" height="512" fill="#131010"/>
+<g transform="translate(31, 193) scale(3)">
+<path d="M0 6H24V12H0V6ZM6 0H12V6H6V0ZM6 12H12V18H6V12ZM30 6H54V12H30V6ZM30 12H36V18H30V12ZM48 12H54V18H48V12ZM60 6H84V12H60V6ZM66 0H72V6H66V0ZM66 12H72V18H66V12ZM90 6H114V12H90V6ZM90 12H96V18H90V12ZM108 12H114V18H108V12ZM120 6H150V12H120V6ZM120 12H126V18H120V12ZM132 12H138V18H132V12ZM144 12H150V18H144V12Z" fill="#F1ECEC"/>
+<path d="M6 18H12V30H6V18ZM6 30H18V36H6V30ZM30 18H36V30H30V18ZM30 30H54V36H30V30ZM48 18H54V30H48V18ZM66 18H72V30H66V18ZM66 30H78V36H66V30ZM90 18H114V24H90V18ZM90 24H96V30H90V24ZM90 30H114V36H90V30ZM120 18H126V36H120V18ZM132 18H138V24H132V18ZM144 18H150V36H144V18Z" fill="#B7B1B1"/>
+</g>
+</svg>

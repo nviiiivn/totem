@@ -220,10 +220,22 @@ export const run = Effect.fn("Tui.run")(function* (input: TuiInput) {
       )
       yield* Effect.addFinalizer(() => Effect.sync(TuiAudio.dispose))
       const shutdown = yield* Deferred.make<unknown>()
-      const onSighup = () => destroyRenderer(renderer)
+      // Restore terminal private modes (alt screen, SGR mouse tracking, raw input)
+      // before the process exits on a signal. Without this, SIGTERM/SIGQUIT
+      // leave the terminal in SGR mouse mode and the next shell prompt sees
+      // garbage like `[<0;80;24M` injected on mouse moves. SIGHUP was already
+      // covered; SIGTERM and SIGQUIT are the common ones for `kill` and Ctrl+\.
+      // SIGKILL cannot be caught and is intentionally not listed.
+      const onTerminalSignal = () => destroyRenderer(renderer)
+      const terminalSignals = ["SIGHUP", "SIGTERM", "SIGQUIT"] as const
       yield* Effect.acquireRelease(
-        Effect.sync(() => process.on("SIGHUP", onSighup)),
-        () => Effect.sync(() => process.off("SIGHUP", onSighup)),
+        Effect.sync(() => {
+          for (const sig of terminalSignals) process.on(sig, onTerminalSignal)
+        }),
+        () =>
+          Effect.sync(() => {
+            for (const sig of terminalSignals) process.off(sig, onTerminalSignal)
+          }),
       )
       renderer.once("destroy", () => Deferred.doneUnsafe(shutdown, Effect.void))
       const pluginRuntime = createPluginRuntime()
@@ -444,24 +456,24 @@ function App(props: { onSnapshot?: () => Promise<string[]>; pluginHost: TuiPlugi
     if (!terminalTitleEnabled() || Flag.OPENCODE_DISABLE_TERMINAL_TITLE) return
 
     if (route.data.type === "home") {
-      renderer.setTerminalTitle("OpenCode")
+      renderer.setTerminalTitle("totem")
       return
     }
 
     if (route.data.type === "session") {
       const session = sync.session.get(route.data.sessionID)
       if (!session || isDefaultTitle(session.title)) {
-        renderer.setTerminalTitle("OpenCode")
+        renderer.setTerminalTitle("totem")
         return
       }
 
       const title = session.title.length > 40 ? session.title.slice(0, 37) + "..." : session.title
-      renderer.setTerminalTitle(`OC | ${title}`)
+      renderer.setTerminalTitle(`totem | ${title}`)
       return
     }
 
     if (route.data.type === "plugin") {
-      renderer.setTerminalTitle(`OC | ${route.data.id}`)
+      renderer.setTerminalTitle(`totem | ${route.data.id}`)
     }
   })
 
