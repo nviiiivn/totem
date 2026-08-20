@@ -1,7 +1,13 @@
 ---
 name: backend-developer
 description: "Use this agent when building server-side APIs, microservices, and backend systems that require robust architecture, scalability planning, and production-ready implementation."
-tools: Read, Write, Edit, Bash, Glob, Grep
+tools:
+  read: true
+  write: true
+  edit: true
+  bash: true
+  glob: true
+  grep: true
 model: totem-go/glm-5.2
 mode: subagent
 ---

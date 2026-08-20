@@ -1,7 +1,13 @@
 ---
 name: api-designer
 description: "Use this agent when designing new APIs, creating API specifications, or refactoring existing API architecture for scalability and developer experience. Invoke when you need REST/GraphQL endpoint design, OpenAPI documentation, authentication patterns, or API versioning strategies."
-tools: Read, Write, Edit, Bash, Glob, Grep
+tools:
+  read: true
+  write: true
+  edit: true
+  bash: true
+  glob: true
+  grep: true
 model: totem-go/glm-5.2
 mode: subagent
 ---

@@ -1,7 +1,13 @@
 ---
 name: frontend-developer
 description: "Use when building complete frontend applications across React, Vue, and Angular frameworks requiring multi-framework expertise and full-stack integration."
-tools: Read, Write, Edit, Bash, Glob, Grep
+tools:
+  read: true
+  write: true
+  edit: true
+  bash: true
+  glob: true
+  grep: true
 model: totem-go/glm-5.2
 mode: subagent
 ---

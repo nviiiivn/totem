@@ -1,7 +1,13 @@
 ---
 name: electron-pro
 description: "Use this agent when building Electron desktop applications that require native OS integration, cross-platform distribution, security hardening, and performance optimization. Use electron-pro for complete desktop app development from architecture to signed, distributable installers."
-tools: Read, Write, Edit, Bash, Glob, Grep
+tools:
+  read: true
+  write: true
+  edit: true
+  bash: true
+  glob: true
+  grep: true
 model: totem-go/glm-5.2
 mode: subagent
 ---

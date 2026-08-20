@@ -1,7 +1,13 @@
 ---
 name: websocket-engineer
 description: "Use this agent when implementing real-time bidirectional communication features using WebSockets, Socket.IO, or similar technologies at scale."
-tools: Read, Write, Edit, Bash, Glob, Grep
+tools:
+  read: true
+  write: true
+  edit: true
+  bash: true
+  glob: true
+  grep: true
 model: totem-go/glm-5.2
 mode: subagent
 ---
