@@ -1,0 +1,23 @@
+{
+  "name": "totem-log-sanitizer",
+  "version": "1.0.0",
+  "description": "Totem log sanitizer. Redacts JWT tokens, bcrypt hashes, and base64 blobs from chat before they reach the model. Long-string heuristic removed (unusable on natural prose).",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir dist --target bun --format esm",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": ["dist"],
+  "devDependencies": {
+    "@totem-ai/plugin": "workspace:*",
+    "@types/bun": "catalog:"
+  }
+}

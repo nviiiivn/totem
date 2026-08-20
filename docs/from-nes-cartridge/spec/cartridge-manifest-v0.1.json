@@ -1,0 +1,184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nes-cartridge.dev/schema/v0.1/cartridge-manifest.json",
+  "title": "NES Cartridge Manifest",
+  "type": "object",
+  "required": ["spec_version", "id", "title", "chunking", "embeddings"],
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "const": "0.1",
+      "description": "Cartridge specification version"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^urn:cartridge:[a-z0-9-]+:[a-z0-9-]+:v\\d+(\\.\\d+)*$",
+      "description": "Unique cartridge identifier (e.g., urn:cartridge:networking:tcpip-guide:v2.3)"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "description": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX license identifier or custom"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+(\\.\\d+)*(-[a-z0-9-]+)?$"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "source_hashes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["algorithm", "hash", "path"],
+        "properties": {
+          "algorithm": { "type": "string", "enum": ["sha256", "blake3"] },
+          "hash": { "type": "string" },
+          "path": { "type": "string" },
+          "size_bytes": { "type": "integer" }
+        }
+      }
+    },
+    "chunking": {
+      "type": "object",
+      "required": ["strategy", "chunk_size", "overlap", "tokenizer"],
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": ["recursive", "semantic", "markdown", "fixed", "custom"]
+        },
+        "chunk_size": {
+          "type": "integer",
+          "minimum": 64,
+          "maximum": 8192
+        },
+        "overlap": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1024
+        },
+        "tokenizer": {
+          "type": "string",
+          "description": "HF tokenizer identifier used for counting"
+        },
+        "custom_plugin": {
+          "type": "string",
+          "description": "Plugin name if strategy=custom"
+        }
+      }
+    },
+    "embeddings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["model", "dim", "index_type", "path"],
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "HF model identifier (e.g., nomic-ai/nomic-embed-text-v1.5)"
+          },
+          "dim": {
+            "type": "integer",
+            "minimum": 64,
+            "maximum": 4096
+          },
+          "index_type": {
+            "type": "string",
+            "enum": ["hnsw", "ivf", "flat", "lsh"]
+          },
+          "path": {
+            "type": "string",
+            "description": "Relative path to embedding directory"
+          },
+          "index_params": {
+            "type": "object",
+            "description": "Index-specific parameters (M, efConstruction, nlist, etc.)"
+          },
+          "quantization": {
+            "type": "string",
+            "enum": ["none", "fp16", "int8", "binary"],
+            "default": "none"
+          }
+        }
+      }
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "path", "processed_by"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["pdf", "epub", "html", "markdown", "text", "audio", "video", "image", "archive"]
+          },
+          "path": { "type": "string" },
+          "mime_type": { "type": "string" },
+          "size_bytes": { "type": "integer" },
+          "pages": { "type": "integer" },
+          "duration_sec": { "type": "number" },
+          "processed_by": {
+            "type": "string",
+            "description": "Extractor plugin + version (e.g., marker:v1.7)"
+          },
+          "metadata": { "type": "object" }
+        }
+      }
+    },
+    "distillates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "path", "count"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["entities", "relationships", "summaries", "faq", "graph", "custom"]
+          },
+          "path": { "type": "string" },
+          "count": { "type": "integer" },
+          "model": { "type": "string" },
+          "prompt_version": { "type": "string" }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "min_client_version": { "type": "string" },
+        "recommended_embedding": { "type": "string" },
+        "required_plugins": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "properties": {
+        "extraction_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "chunking_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "embedding_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "validation_passed": { "type": "boolean" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

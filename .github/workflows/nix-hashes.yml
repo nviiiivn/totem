@@ -10,7 +10,7 @@ on:
     paths:
       - "bun.lock"
       - "package.json"
-      - "packages/*/package.json"
+      - "totem/*/package.json", "totem/totem-faces/*/package.json", "totem/totem-faces/console/*/package.json", "totem-ken/*/package.json", "totem-ken/stats/*/package.json", "totem-adze/*/package.json", "totem-pole/*/package.json"
       - "flake.lock"
       - "nix/node_modules.nix"
       - "nix/scripts/**"
@@ -104,8 +104,8 @@ jobs:
       - name: Setup git committer
         uses: ./.github/actions/setup-git-committer
         with:
-          opencode-app-id: ${{ vars.OPENCODE_APP_ID }}
-          opencode-app-secret: ${{ secrets.OPENCODE_APP_SECRET }}
+          totem-app-id: ${{ vars.TOTEM_APP_ID }}
+          totem-app-secret: ${{ secrets.TOTEM_APP_SECRET }}
 
       - name: Pull latest changes
         run: |

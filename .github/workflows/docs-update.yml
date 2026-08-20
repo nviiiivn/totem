@@ -10,7 +10,7 @@ env:
 
 jobs:
   update-docs:
-    if: github.repository == 'sst/opencode'
+    if: github.repository == 'sst/totem'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     permissions:
       id-token: write
@@ -41,13 +41,13 @@ jobs:
             } >> $GITHUB_OUTPUT
           fi
 
-      - name: Run opencode
+      - name: Run totem
         if: steps.commits.outputs.has_commits == 'true'
-        uses: sst/opencode/github@2c14fc5586fe0b88e5c04732d2e846769cc35671 # latest
+        uses: sst/totem/github@2c14fc5586fe0b88e5c04732d2e846769cc35671 # latest
         env:
-          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          TOTEM_API_KEY: ${{ secrets.TOTEM_API_KEY }}
         with:
-          model: opencode/gpt-5.2
+          model: totem/gpt-5.2
           agent: docs
           prompt: |
             Review the following commits from the last ${{ env.LOOKBACK_HOURS }} hours and identify any new features that may need documentation.
@@ -59,13 +59,13 @@ jobs:
             Steps:
             1. For each commit that looks like a new feature or significant change:
                - Read the changed files to understand what was added
-               - Check if the feature is already documented in packages/web/src/content/docs/*
+               - Check if the feature is already documented in totem-ken/web/src/content/docs/*
             2. If you find undocumented features:
-               - Update the relevant documentation files in packages/web/src/content/docs/*
+               - Update the relevant documentation files in totem-ken/web/src/content/docs/*
                - Follow the existing documentation style and structure
                - Make sure to document the feature clearly with examples where appropriate
             3. If all new features are already documented, report that no updates are needed
-            4. If you are creating a new documentation file be sure to update packages/web/astro.config.mjs too.
+            4. If you are creating a new documentation file be sure to update totem-ken/web/astro.config.mjs too.
 
             Focus on user-facing features and API changes. Skip internal refactors, bug fixes, and test updates unless they affect user-facing behavior.
             Don't feel the need to document every little thing. It is perfectly okay to make 0 changes at all.

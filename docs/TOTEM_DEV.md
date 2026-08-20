@@ -3,20 +3,20 @@
 > Running tracking document for totem development.
 > Started: 2026-07-04
 > Owner: nvii
-> Current model: GLM-5.1 (opencode-go)
+> Current model: GLM-5.1 (totem-go)
 
 ---
 
 ## WHAT TOTEM IS
 
-Fork of opencode (github.com/sst/opencode / github.com/anomalyco/opencode).
+Fork of totem (github.com/sst/totem / github.com/anomalyco/totem).
 TypeScript monorepo, Bun runtime, Effect-TS, SolidJS TUI, SQLite via Drizzle.
 27 packages. Compiled binary: `totemken`.
 
 Source: `/home/nvii/projects/totem/`
 Config: `~/.config/totem/totem.json`
 Constitution source: `/home/nvii/DocVault/DeVault/1 - AI Conversations/1.00 GLOBAL/1.00.1 Conversational Constitution.md`
-Constitution embedded copy: `packages/opencode/src/session/prompt/constitution.txt`
+Constitution embedded copy: `packages/totem/src/session/prompt/constitution.txt`
 CLAUDE.md: `~/.claude/CLAUDE.md`
 
 ---
@@ -26,7 +26,7 @@ CLAUDE.md: `~/.claude/CLAUDE.md`
 ### Current Implementation
 
 Constitution (25 rules) is injected as plain text at ONE point:
-`packages/opencode/src/session/system.ts:65` -> `PROMPT_CONSTITUTION`
+`packages/totem/src/session/system.ts:65` -> `PROMPT_CONSTITUTION`
 
 Flow: `system.ts:environment()` -> `prompt.ts:1359-1371` (assembled into system[]) -> `request.ts:58-66` (joined into single string for LLM)
 
@@ -46,7 +46,7 @@ Reinforcement: only build + plan agents have extra constitution prompt in totem.
 
 ### Tier 1: Prompt Consistency (edits only, no new code)
 
-- [ ] T1.1 Rename "opencode"/"OpenCode" to "totem" in all prompt files
+- [ ] T1.1 Rename "totem"/"Totem" to "totem" in all prompt files
       Files: default.txt, anthropic.txt, gpt.txt, gemini.txt, beast.txt, codex.txt, trinity.txt, kimi.txt
 - [ ] T1.2 Strip sycophantic/performative framing from model prompts (Rule 18)
       "best coding agent on the planet" etc
@@ -71,7 +71,7 @@ Reinforcement: only build + plan agents have extra constitution prompt in totem.
 ### Security (separate from constitution)
 
 - [ ] S.1 Move API keys from totem.json to environment variables
-      Keys affected: openrouter, opencode-go, opencode providers
+      Keys affected: openrouter, totem-go, totem providers
 
 ---
 
@@ -82,18 +82,18 @@ Reinforcement: only build + plan agents have extra constitution prompt in totem.
 | Resource | URL | Stars | Status |
 |----------|-----|-------|--------|
 | oh-my-openagent | github.com/code-yeongyu/oh-my-openagent | 64.8k | Active, updated 12h ago |
-| oh-my-opencode-slim | github.com/alvinunreal/oh-my-opencode-slim | 6.5k | Active, 49 releases, v2.1.0 |
-| awesome-opencode | github.com/awesome-opencode/awesome-opencode | 8.6k | Active, 150+ plugins listed |
-| awesome-opencode-subagents | github.com/ankitmundada/awesome-opencode-subagents | 24 | 100+ subagents |
-| awesome-opencode-skills | github.com/jshsakura/awesome-opencode-skills | 19 | 136+ skills, auto-sync |
+| oh-my-totem-slim | github.com/alvinunreal/oh-my-totem-slim | 6.5k | Active, 49 releases, v2.1.0 |
+| awesome-totem | github.com/awesome-totem/awesome-totem | 8.6k | Active, 150+ plugins listed |
+| awesome-totem-subagents | github.com/ankitmundada/awesome-totem-subagents | 24 | 100+ subagents |
+| awesome-totem-skills | github.com/jshsakura/awesome-totem-skills | 19 | 136+ skills, auto-sync |
 | awesome-claude-code | github.com/hesreallyhim/awesome-claude-code | 48.1k | Active, 15 sections |
 | awesome-claude-code-subagents | github.com/VoltAgent/awesome-claude-code-subagents | 22.9k | 100+ subagents |
 | awesome-claude-skills | github.com/travisvn/awesome-claude-skills | 13.9k | Active |
 | awesome-mcp-servers | github.com/punkpeye/awesome-mcp-servers | 90.3k | Active, canonical MCP list |
-| opencode-marketplace (NikiforovAll) | github.com/NikiforovAll/opencode-marketplace | 8 | Stale (Feb) |
-| opencode-souk | github.com/Mirrowel/opencode-souk | 4 | TUI marketplace, updated May |
+| totem-marketplace (NikiforovAll) | github.com/NikiforovAll/totem-marketplace | 8 | Stale (Feb) |
+| totem-souk | github.com/Mirrowel/totem-souk | 4 | TUI marketplace, updated May |
 | agentsys | github.com/agent-sh/agentsys | 886 | 24 plugins, 49 agents, 44 skills |
-| opencode-power-pack | github.com/waybarrios/opencode-power-pack | 415 | 11 Claude skills ported to opencode |
+| totem-power-pack | github.com/waybarrios/totem-power-pack | 415 | 11 Claude skills ported to totem |
 | claude-mem | github.com/thedotmack/claude-mem | 85.9k | Persistent memory, already installed locally |
 
 ### Already installed locally (marketplaces)
@@ -120,15 +120,15 @@ laravel-boost, linear, playwright, serena, telegram, terraform
 
 ### oh-my-totempole TODO
 
-- [ ] O.1 Clone and evaluate oh-my-opencode-slim for what agents/tools to port
-- [ ] O.2 Clone and evaluate awesome-opencode list for plugins/skills/MCP servers
+- [ ] O.1 Clone and evaluate oh-my-totem-slim for what agents/tools to port
+- [ ] O.2 Clone and evaluate awesome-totem list for plugins/skills/MCP servers
 - [ ] O.3 Clone and evaluate awesome-claude-code for portable skills/agents
 - [ ] O.4 Clone and evaluate awesome-mcp-servers for MCP servers to integrate
 - [ ] O.5 Evaluate agentsys (24 plugins, 49 agents, 44 skills) for porting
-- [ ] O.6 Evaluate opencode-power-pack (11 ported skills)
+- [ ] O.6 Evaluate totem-power-pack (11 ported skills)
 - [ ] O.7 Design oh-my-totempole marketplace structure within totem
 - [ ] O.8 Port selected plugins/skills/agents/MCP servers into totem
-- [ ] O.9 Create marketplace config in .totem/ or .opencode/
+- [ ] O.9 Create marketplace config in .totem/ or .totem/
 
 ---
 
@@ -152,8 +152,8 @@ laravel-boost, linear, playwright, serena, telegram, terraform
 - Read full constitution (25 rules) from DocVault
 - Mapped constitution injection path: constitution.txt -> system.ts:65 -> prompt.ts -> request.ts
 - Identified 6 gaps in constitution enforcement
-- Found Oh My OpenCode ecosystem (fragmented: oh-my-openagent 64.8k, oh-my-opencode-slim 6.5k)
-- Found awesome-opencode (8.6k stars, 150+ plugins), awesome-mcp-servers (90.3k stars)
+- Found Oh My Totem ecosystem (fragmented: oh-my-openagent 64.8k, oh-my-totem-slim 6.5k)
+- Found awesome-totem (8.6k stars, 150+ plugins), awesome-mcp-servers (90.3k stars)
 - Inventoried local marketplaces: thedotmack (claude-mem), claude-plugins-official (50 plugins)
 - Created this tracking document
 
@@ -162,7 +162,7 @@ laravel-boost, linear, playwright, serena, telegram, terraform
 ## NOTES
 
 - Running compiled binary (totemken), so source edits are safe until rebuild
-- Rebuild requires external terminal: ./packages/opencode/script/build.ts --single
+- Rebuild requires external terminal: ./packages/totem/script/build.ts --single
 - Keep a stable binary as fallback when modifying session engine
 - DB schema changes (packages/core) need testing against copy first
 - ASCII only in terminal output - no unicode boxes/em-dashes
@@ -174,17 +174,17 @@ laravel-boost, linear, playwright, serena, telegram, terraform
 
 #### Plugins installed in totem.json (10 npm plugins)
 - [x] envsitter-guard (v0.0.4) - .env file protection
-- [x] opencode-log-sanitizer (v1.3.0) - secret redaction before model
+- [x] totem-log-sanitizer (v1.3.0) - secret redaction before model
 - [x] cc-safety-net (v1.0.6) - destructive command blocking
-- [x] opencode-supermemory (v2.0.8) - persistent cross-session memory
-- [x] opencode-pty (v0.3.4) - background PTY processes
-- [x] opencode-websearch-cited (v1.2.0) - cited web search
-- [x] @tarquinen/opencode-dcp (v3.1.14) - dynamic context pruning
+- [x] totem-supermemory (v2.0.8) - persistent cross-session memory
+- [x] totem-pty (v0.3.4) - background PTY processes
+- [x] totem-websearch-cited (v1.2.0) - cited web search
+- [x] @tarquinen/totem-dcp (v3.1.14) - dynamic context pruning
 - [x] workaholic (v1.3.0) - blocks premature "done"
-- [x] opencode-notify (v0.3.1) - OS notifications
-- [x] opencode-worktree (v0.4.1) - git worktree management
+- [x] totem-notify (v0.3.1) - OS notifications
+- [x] totem-worktree (v0.4.1) - git worktree management
 
-#### MCP servers in .opencode/opencode.jsonc (7 servers)
+#### MCP servers in .totem/totem.jsonc (7 servers)
 - [x] context7 (@upstash/context7-mcp v3.2.2) - up-to-date docs lookup
 - [x] playwright (@playwright/mcp v0.0.77) - browser automation
 - [x] github (HTTP MCP) - GitHub API access (needs GITHUB_PERSONAL_ACCESS_TOKEN env)

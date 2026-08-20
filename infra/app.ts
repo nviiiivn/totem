@@ -12,7 +12,7 @@ const bucket = new sst.cloudflare.Bucket("Bucket")
 
 export const api = new sst.cloudflare.Worker("Api", {
   domain: `api.${domain}`,
-  handler: "packages/function/src/api.ts",
+  handler: "totem-adze/function/src/api.ts",
   environment: {
     WEB_DOMAIN: domain,
   },
@@ -51,7 +51,7 @@ export const api = new sst.cloudflare.Worker("Api", {
 
 new sst.cloudflare.x.Astro("Web", {
   domain: "docs." + domain,
-  path: "packages/web",
+  path: "totem-ken/web",
   environment: {
     // For astro config
     SST_STAGE: $app.stage,
@@ -61,7 +61,7 @@ new sst.cloudflare.x.Astro("Web", {
 
 new sst.cloudflare.StaticSite("WebApp", {
   domain: "app." + domain,
-  path: "packages/app",
+  path: "totem/totem-faces/app",
   build: {
     command: "bun turbo build",
     output: "./dist",

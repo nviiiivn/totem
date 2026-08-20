@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-import { Script } from "@opencode-ai/script"
+import { Script } from "@totem-ai/script"
 import { $ } from "bun"
 import { fileURLToPath } from "url"
 
@@ -25,7 +25,7 @@ async function prepareReleaseFiles() {
   }
 
   await $`bun install`
-  await $`./packages/sdk/js/script/build.ts`
+  await $`./totem-adze/sdk/js/script/build.ts`
 }
 
 if (Script.release && !Script.preview) {
@@ -36,20 +36,20 @@ if (Script.release && !Script.preview) {
 await prepareReleaseFiles()
 
 console.log("\n=== cli ===\n")
-await $`bun ./packages/opencode/script/publish.ts`
+await $`bun ./totem/script/publish.ts`
 
 console.log("\n=== preview cli ===\n")
-await $`bun ./packages/cli/script/publish.ts`
+await $`bun ./totem/cli/script/publish.ts`
 
 console.log("\n=== sdk ===\n")
-await $`bun ./packages/sdk/js/script/publish.ts`
+await $`bun ./totem-adze/sdk/js/script/publish.ts`
 
 console.log("\n=== plugin ===\n")
-await $`bun ./packages/plugin/script/publish.ts`
+await $`bun ./totem/plugin/script/publish.ts`
 
 if (Script.release) {
-  await $`bun ./packages/desktop/scripts/finalize-latest-json.ts`
-  await $`bun ./packages/desktop/scripts/finalize-latest-yml.ts`
+  await $`bun ./totem/totem-faces/desktop/scripts/finalize-latest-json.ts`
+  await $`bun ./totem/totem-faces/desktop/scripts/finalize-latest-yml.ts`
 }
 
 if (Script.release && !Script.preview) {

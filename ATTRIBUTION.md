@@ -1,9 +1,9 @@
 # Totem — Attribution
 
-Totem is a fork of [OpenCode](https://opencode.ai) by SST.
+Totem is a fork of [Totem](https://totem.ai) by SST.
 
-**Upstream:** OpenCode — AI-powered development tool
-- Repository: https://github.com/sst/opencode
+**Upstream:** Totem — AI-powered development tool
+- Repository: https://github.com/sst/totem
 - License: MIT (see LICENSE file)
 - Original author: SST
 

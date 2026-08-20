@@ -105,7 +105,7 @@ export const inferenceEvent = new sst.Linkable("InferenceEvent", {
 ////////////////
 
 const cluster = planetscale.getDatabaseOutput({
-  name: "opencode-stats",
+  name: "totem-stats",
   organization: "anomalyco",
 })
 
@@ -152,7 +152,7 @@ new sst.x.DevCommand("StatsStudio", {
   },
   dev: {
     command: "bun db:studio",
-    directory: "packages/stats/core",
+    directory: "totem-ken/stats/core",
     autostart: false,
   },
 })
@@ -162,7 +162,7 @@ new sst.x.DevCommand("StatsStudio", {
 ////////////////
 
 export const app = new sst.cloudflare.x.SolidStart("Stats", {
-  path: "packages/stats/app",
+  path: "totem-ken/stats/app",
   buildCommand: "bun run build",
   domain: `stats.${domain}`,
   link: [database, EMAILOCTOPUS_API_KEY],
@@ -188,7 +188,7 @@ export const statSync = new sst.aws.Service("StatsSyncService", {
   memory: "0.5 GB",
   image: {
     context: ".",
-    dockerfile: "packages/stats/server/Dockerfile",
+    dockerfile: "totem-ken/stats/server/Dockerfile",
   },
   command: ["bun", "src/stat-sync.ts"],
   link: [database, inferenceEvent, statsSyncConfig],
@@ -199,7 +199,7 @@ export const statSync = new sst.aws.Service("StatsSyncService", {
   },
   dev: {
     command: "bun src/stat-sync.ts",
-    directory: "packages/stats/server",
+    directory: "totem-ken/stats/server",
     autostart: false,
   },
 })

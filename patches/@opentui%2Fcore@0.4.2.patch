@@ -1,0 +1,17 @@
+diff --git a/index-6xr3rbbe.js b/index-6xr3rbbe.js
+index 472029f83e09d7e72296ea261bd9bf5e57164568..fa91c3010981f0b7c66477a5f20370f6898af6dc 100644
+--- a/index-6xr3rbbe.js
++++ b/index-6xr3rbbe.js
+@@ -7098,6 +7098,12 @@ Captured external output:
+     this.realStdoutWrite.call(this.stdout, ANSI.reset);
+   }
+   exitHandler = (() => {
++    try {
++      this.realStdoutWrite.call(
++        this.stdout,
++        "\x1B[?1000l\x1B[?1002l\x1B[?1003l\x1B[?1005l\x1B[?1006l\x1B[?1015l\x1B[?1049l\x1B[?2004l\x1B[?1l\x1B[?66l\x1B[>4;0m\x1B[>0m\x1B[?25h\x1B[0m\x1B[r",
++      );
++    } catch (e) {}
+     this.destroy();
+     if (env.OTUI_DUMP_CAPTURES) {
+       sleep(100).then(() => {

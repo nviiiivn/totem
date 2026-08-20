@@ -4,7 +4,7 @@ const current = aws.getCallerIdentityOutput({})
 const partition = aws.getPartitionOutput({})
 const region = aws.getRegionOutput({})
 
-const tableBucketName = `opencode-${$app.stage}-lake`
+const tableBucketName = `totem-${$app.stage}-lake`
 const glueCatalogName = "s3tablescatalog"
 const glueCatalogArn = $interpolate`arn:${partition.partition}:glue:${region.region}:${current.accountId}:catalog`
 const glueS3TablesCatalogArn = $interpolate`${glueCatalogArn}/${glueCatalogName}`
@@ -52,17 +52,17 @@ const s3TablesCatalog = new aws.cloudcontrol.Resource(
 )
 
 const athenaResultsBucket = new aws.s3.Bucket("LakeAthenaResults", {
-  bucket: `opencode-${$app.stage}-lake-athena-results`,
+  bucket: `totem-${$app.stage}-lake-athena-results`,
   forceDestroy: $app.stage !== "production",
 })
 
 const firehoseErrorBucket = new aws.s3.Bucket("LakeFirehoseErrors", {
-  bucket: `opencode-${$app.stage}-lake-firehose-errors`,
+  bucket: `totem-${$app.stage}-lake-firehose-errors`,
   forceDestroy: $app.stage !== "production",
 })
 
 const athenaWorkgroup = new aws.athena.Workgroup("LakeAthenaWorkgroup", {
-  name: `opencode-${$app.stage}-lake-workgroup`,
+  name: `totem-${$app.stage}-lake-workgroup`,
   forceDestroy: $app.stage !== "production",
   configuration: {
     enforceWorkgroupConfiguration: true,
@@ -156,7 +156,7 @@ const firehosePolicy = new aws.iam.RolePolicy("LakeFirehosePolicy", {
 const firehose = new aws.kinesis.FirehoseDeliveryStream(
   "LakeFirehose",
   {
-    name: `opencode-${$app.stage}-lake-ingest`,
+    name: `totem-${$app.stage}-lake-ingest`,
     destination: "iceberg",
     icebergConfiguration: {
       appendOnly: true,
@@ -218,7 +218,7 @@ const ingestService = new sst.aws.Service("LakeIngestService", {
   memory: "4 GB",
   image: {
     context: ".",
-    dockerfile: "packages/stats/server/Dockerfile",
+    dockerfile: "totem-ken/stats/server/Dockerfile",
   },
   link: [ingestConfig],
   permissions: [
@@ -261,7 +261,7 @@ const ingestService = new sst.aws.Service("LakeIngestService", {
   },
   dev: {
     command: "bun run start",
-    directory: "packages/stats/server",
+    directory: "totem-ken/stats/server",
     url: "http://localhost:3000",
   },
   wait: $app.stage === "production",
