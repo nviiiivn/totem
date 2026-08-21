@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "version": "0.1.0",
+  "name": "@totem-ai/cartridge",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "bun test --timeout 30000 --only-failures",
+    "typecheck": "tsgo --noEmit"
+  },
+  "bin": {
+    "cartridge": "./bin/cartridge"
+  },
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "devDependencies": {
+    "@tsconfig/bun": "catalog:",
+    "@types/bun": "catalog:"
+  },
+  "dependencies": {
+    "gray-matter": "4.0.3",
+    "js-tiktoken": "1.0.20"
+  }
+}
