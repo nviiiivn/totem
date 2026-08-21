@@ -21,7 +21,7 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "@totem-ai/ui#test": {
+    "@totem-ai/tui#test": {
       "dependsOn": ["^build"],
       "outputs": []
     },
