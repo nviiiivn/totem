@@ -1,14 +1,10 @@
 <p align="center">
   <a href="https://totem.alola.lol">
-    <picture>
-      <source srcset="totem/totem-faces/console/app/src/asset/logo-ornate-dark.svg" media="(prefers-color-scheme: dark)">
-      <source srcset="totem/totem-faces/console/app/src/asset/logo-ornate-light.svg" media="(prefers-color-scheme: light)">
-      <img src="totem/totem-faces/console/app/src/asset/logo-ornate-light.svg" alt="Totem logo">
-    </picture>
+    <img src="https://totem.alola.lol/assets/totem.svg" alt="Totem logo" width="150" height="42">
   </a>
 </p>
 
-<p align="center"><b>TOT3MIC</b> — structural constitutional enforcement for AI coding agents.<br>The rules live in the machinery, not in the prompt.</p>
+<p align="center"><b>totem</b> — structural constitutional enforcement for AI coding agents.<br>The rules live in the machinery, not in the prompt.</p>
 
 <p align="center">
   <a href="https://totem.alola.lol">Wiki</a> ·
