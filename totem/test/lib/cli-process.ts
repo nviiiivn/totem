@@ -204,7 +204,11 @@ export function withCliFixture<A, E>(
 
     const spawn = Effect.fn("totem.spawn")(function* (args: string[], opts?: SpawnOpts) {
       const start = Date.now()
-      const timeoutMs = opts?.timeoutMs ?? 30_000
+      // 60s, not 30s: spawning from source (not the compiled binary) costs
+      // ~5s of pure transpile time per process (measured), and cliIt.concurrent
+      // runs many of these at once — on a 4-core box that queues up well past
+      // 30s before any of them even start running, independent of machine speed.
+      const timeoutMs = opts?.timeoutMs ?? 60_000
       // stdin: "ignore" so the child doesn't see a piped stdin and block
       // on `Bun.stdin.text()` (see src/cli/cmd/run.ts — non-TTY stdin is
       // consumed as the prompt). The old Process.run wrapper defaulted to
