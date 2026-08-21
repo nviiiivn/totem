@@ -8,14 +8,18 @@ export interface VisionOptions {
   prompt?: string
 }
 
-const DEFAULT_VISION_MODEL = "moondream"
-const DEFAULT_TRANSCRIBE_PROMPT =
-  "Transcribe every word of visible text in this image exactly as written, preserving reading order and paragraph breaks. Output only the transcribed text in markdown — no commentary, no description of the image itself. If there is no legible text, output nothing."
+// Runs against the Tower's ollama (GPU box), not this Pi — moondream on the Pi's
+// local ollama produced garbage output (ollama 0.24.0 / ARM incompatibility,
+// confirmed broken even on plain text prompts, not image-specific). Tower has
+// deepseek-ocr:3b, purpose-built for this and verified working end-to-end.
+const DEFAULT_VISION_MODEL = "deepseek-ocr:3b"
+const DEFAULT_BASE_URL = "http://192.168.86.24:11434"
+const DEFAULT_TRANSCRIBE_PROMPT = "What text is in this image?"
 
 // Local VLM call. CPU-only inference on a Pi is slow (seconds to tens of
 // seconds per page) — callers should expect that, not treat it as a hang.
 export async function transcribeImageBytes(imageBytes: Buffer, options: VisionOptions = {}): Promise<string> {
-  const baseUrl = options.baseUrl ?? "http://localhost:11434"
+  const baseUrl = options.baseUrl ?? DEFAULT_BASE_URL
   const model = options.model ?? DEFAULT_VISION_MODEL
   const prompt = options.prompt ?? DEFAULT_TRANSCRIBE_PROMPT
 
