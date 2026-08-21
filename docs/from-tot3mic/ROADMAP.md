@@ -10,7 +10,9 @@
 - [ ] Fork/greenlight conversation — decide substrate (O1).
 - [ ] First public snapshot + timeline start.
 
-## Phase 1 — Strip the sand
+## Phase 1 — Strip the sand (not started, as of 2026-08-21)
+
+No `SALVAGE/` audit exists yet, no umbreality/OMO purge has happened, and the prompt-constitution hasn't been removed. A test-suite bug hunt on 2026-08-19 to 21 incidentally surfaced and fixed some inherited-bones debt (rename artifacts from the opencode→totem fork — see `STATE.md`), but that was a side effect of test triage, not a deliberate Phase 1 pass.
 
 Once a substrate is forked, surgically remove what poisoned the last system and audit what's inherited:
 
@@ -21,7 +23,9 @@ Once a substrate is forked, surgically remove what poisoned the last system and 
 - Audit the inherited bones: engine core, TUI, provider plumbing, session store. Decide keep/adapt/drop for each (record in `SALVAGE/`).
 - Fix the gemma4-26b cutoff (max_tokens/timeout) so local models aren't clipped.
 
-## Phase 2 — Build the adze (enforcement layer)
+## Phase 2 — Build the adze (enforcement layer) — essentially complete as of 2026-08-21
+
+All 8 carves have source + tests. Zero carve-related test failures across every full-suite run in the 2026-08-19 to 21 sessions. Carve 5 (directive surface) lives in the TUI plugin layer rather than `totem/src/enforcement/`, the other 7 are there directly.
 
 Implement the eight carves. This is the heart of the project. Each carve maps a named failure mode to a structural mechanism:
 
@@ -38,13 +42,13 @@ Implement the eight carves. This is the heart of the project. Each carve maps a 
 
 Recommended home for the enforcement layer: **in-source, firewalled** — a new non-optional core module inside the totem engine (precedent: `totem-log-sanitizer` is already non-optional runtime safety). The constitution itself is read-only to the agent.
 
-## Phase 3 — Wire it to the faces
+## Phase 3 — Wire it to the faces (TUI only, as of 2026-08-21)
 
-The enforcement layer has to be visible and controllable in every face (TUI, web, CLI): the STOP command, the active-directive panel, the "what's firing now" view. A rule you can't see or kill isn't enforced (G3).
+The enforcement layer has to be visible and controllable in every face (TUI, web, CLI): the STOP command, the active-directive panel, the "what's firing now" view. A rule you can't see or kill isn't enforced (G3). Web and CLI faces are unconfirmed/unwired.
 
-## Phase 4 — Prove it
+## Phase 4 — Prove it (not started, as of 2026-08-21 — recommended next)
 
-Regression tests built from the autopsy's failure modes. The system must fail-closed on every one of the seven original failures plus compaction amnesia. Then: the public snapshot, the blog, the "why this exists" doc.
+Regression tests built from the autopsy's failure modes. The system must fail-closed on every one of the seven original failures plus compaction amnesia. Then: the public snapshot, the blog, the "why this exists" doc. Only carve-level unit tests exist right now — none of them simulate the actual failure scenario end-to-end through the real pipeline the way it originally happened.
 
 ## The unsolved seam (carried across all phases)
 
