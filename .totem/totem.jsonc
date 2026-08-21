@@ -2,7 +2,28 @@
   "$schema": "https://opencode.ai/config.json",
   "provider": {},
   "permission": {},
-  "plugin": ["file:///home/nvii/.config/totem/plugins/session-transcript.mjs"],
+  // Relative path, not absolute: this resolves from the project root so it works
+  // for anyone who clones the repo, not just the machine it was authored on.
+  // npm plugins below are fetched on first run — this is the out-of-the-box set,
+  // not optional extras. Deliberately excluded: opencode-cache-stats (fails to
+  // load — "must default export an object with server()"; re-add when fixed).
+  "plugin": [
+    "./.totem/plugins/session-transcript.mjs",
+    "opencode-mem",
+    "opencode-pty",
+    "opencode-worktree",
+    "opencode-local-ollama",
+    "opencode-usage-monitor",
+    "opencode-mystatus",
+    "opencode-token-tracker",
+    "opencode-telemetry",
+    "opencode-history-search",
+    "opencode-plan-manager",
+    "opencode-background-agents",
+    "opencode-adaptive-thinking",
+    "opencode-beads",
+    "opencode-froggy",
+  ],
   "references": {
     "effect": {
       "repository": "github.com/Effect-TS/effect-smol",
