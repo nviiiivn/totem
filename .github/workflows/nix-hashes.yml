@@ -3,19 +3,15 @@ name: nix-hashes
 permissions:
   contents: write
 
+# Disabled automatic firing 2026-08-21: the push trigger below had a hard YAML
+# syntax error (one list item crammed with multiple comma-separated quoted
+# strings instead of separate `-` entries) — every push failed instantly with
+# 0 jobs run, regardless of branch/path. Syntax is fixed here, but update-hashes
+# also needs TOTEM_APP_SECRET/TOTEM_APP_ID (not configured) and Blacksmith
+# runners for compute-hash, neither available on this fork, and this fork isn't
+# publishing to nixpkgs. workflow_dispatch kept for manual use if that changes.
 on:
   workflow_dispatch:
-  push:
-    branches: [dev, beta]
-    paths:
-      - "bun.lock"
-      - "package.json"
-      - "totem/*/package.json", "totem/totem-faces/*/package.json", "totem/totem-faces/console/*/package.json", "totem-ken/*/package.json", "totem-ken/stats/*/package.json", "totem-adze/*/package.json", "totem-pole/*/package.json"
-      - "flake.lock"
-      - "nix/node_modules.nix"
-      - "nix/scripts/**"
-      - "patches/**"
-      - ".github/workflows/nix-hashes.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -1,9 +1,12 @@
 name: beta
 
+# Disabled automatic firing 2026-08-21: this needs TOTEM_APP_SECRET/TOTEM_APP_ID
+# (upstream's own bot credentials, not configured on this fork) and a paid
+# Blacksmith runner. It was firing hourly and failing/queueing indefinitely with
+# no way to succeed. workflow_dispatch kept so it's still runnable manually if
+# real credentials for a beta channel ever get configured.
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 * * * *"
 
 jobs:
   sync:
