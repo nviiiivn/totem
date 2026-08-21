@@ -385,6 +385,20 @@ export function Prompt(props: PromptProps) {
         },
       },
       {
+        title: "Hard-stop session (kill switch)",
+        name: "session.stop",
+        slashName: "stop",
+        category: "Session",
+        run: () => {
+          if (!props.sessionID) return
+          void sdk.client.session.stop({
+            sessionID: props.sessionID,
+            reason: "human invoked hard stop from the TUI",
+          })
+          dialog.clear()
+        },
+      },
+      {
         title: "Interrupt session",
         name: "session.interrupt",
         category: "Session",
@@ -568,6 +582,7 @@ export function Prompt(props: PromptProps) {
       "prompt.stash.pop",
       "prompt.stash.list",
       "session.interrupt",
+      "session.stop",
       "workspace.set",
       "session.move",
     ]),
