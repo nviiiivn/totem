@@ -4,69 +4,70 @@
   </a>
 </p>
 
-<p align="center"><b>totem</b> — structural constitutional enforcement for AI coding agents.<br>The rules live in the machinery, not in the prompt.</p>
+<p align="center"><b>Made of spite. Running locally. Answering to no one.</b></p>
 
 <p align="center">
   <a href="https://totem.alola.lol">Wiki</a> ·
-  <a href="docs/PROJECT.md">Project README</a> ·
+  <a href="docs/PROJECT.md">Enforcement layer docs</a> ·
   <a href="CONSTITUTION.md">Constitution</a> ·
-  <a href="docs/ROADMAP.md">Roadmap</a> ·
-  <a href="docs/STATE.md">Live state</a> ·
-  <a href="docs/TIMELINE.md">Timeline</a>
+  <a href="docs/STATE.md">Live state</a>
 </p>
 
 ---
 
 ## What this is
 
-A fork of [OpenCode](https://github.com/anomalyco/opencode)'s engine (TypeScript/Bun, Effect-TS), rebuilt with a hard structural enforcement layer around the model. The thing that keeps the agent honest is **code that runs around the model**, not words the model is asked to read and obey.
+Totem is a standalone fork of [OpenCode](https://github.com/anomalyco/opencode) (v1.17.10) — renamed, rebranded, and hardened with a constitutional agent-prompt philosophy. It runs as its own binary with its own config, providers, and credentials, fully independent of upstream. No OpenCode install required or expected.
 
-The model is the **stone**. The enforcement layer is the **adze** — the blade that works the stone. You don't ask the stone to be worked; it must be physically worked.
+Part of a larger ecosystem (the "Totemic" structure, documented in full on the [wiki](https://totem.alola.lol)): `totem/` is the product itself, alongside `totem-ken/` (docs, stats, the knowledge center), `totem-adze/` (build tooling, SDK), and `totem-pole/` (plugins and mods).
 
-## Why it exists
+## Key features
 
-The previous system was destroyed from the inside. A model, mid-task, compacted its own context, re-summarized finished work as "still to do," and re-did it — looping unsupervised, breaking the runtime, then cascading into deleted sessions, broken providers, and burned API quota. None of it was vandalism. All of it was the model doing exactly what its prompt told it to, with no machinery to stop it.
+- **Constitutional agents.** Default agent prompts are replaced with an explicit constitution — agents are bound by clear, auditable interaction rules instead of vague "be helpful" directives. See [`CONSTITUTION.md`](CONSTITUTION.md).
+- **Structural enforcement layer.** Eight mechanisms ("carves") that make specific failure modes structurally impossible rather than just prompted against — see [`docs/ROADMAP.md`](docs/ROADMAP.md) Phase 2, and [`totem/test/sisyphus-autopsy-regression.test.ts`](totem/test/sisyphus-autopsy-regression.test.ts) for regression tests proving each one against the real incident that motivated it.
+- **Plugin system.** `oh-my-totemken` ships as a bundled, sandboxed plugin — agents, hooks, tools, team mode, three-tier MCP.
+- **Local-first.** Built and run on local hardware. No upstream telemetry, no upstream accounts, no upstream calls home.
+- **Provider-agnostic.** Bring your own keys — talks to whatever provider you configure, nothing hardwired.
 
-The root failure wasn't a bad model or a bad prompt. It was **rules that lived in prose**. Prose rules get weighted, forgotten after compaction, and overridden by louder directives. The full incident report lives on the [wiki](https://totem.alola.lol) and in [`docs/`](docs/) — it names seven failure modes; this project exists to make each of them structurally impossible.
+## Quick start
 
-## The five guarantees
-
-- **G1 — A redirect sticks.** When the human says stop or change, it holds for the whole session.
-- **G2 — It cannot eat its own rules.** The constitution, the agent's prompt, and the enforcement hooks are read-only to the agent at runtime.
-- **G3 — Every directive is visible and revocable.** The human can see what's firing and kill any of it, live.
-- **G4 — Conflicts resolve with the human on top.** Deterministically, in code.
-- **G5 — Delivery beats retention.** Success is rounds-to-done, not session length or tool-call volume.
-
-Implemented as eight structural mechanisms ("carves") — see [`docs/ROADMAP.md`](docs/ROADMAP.md) Phase 2 for the full spec, and [`totem/test/sisyphus-autopsy-regression.test.ts`](totem/test/sisyphus-autopsy-regression.test.ts) for regression tests proving each one against the actual incident it fixes.
-
-## Status
-
-Phase 2 (the 8 carves) is essentially complete. Phase 4 (proving each carve against the real historical failure it fixes) is underway. See [`docs/STATE.md`](docs/STATE.md) for the live, up-to-date detail — that file is the anti-amnesia device for this project; trust it over anything else if it looks stale.
-
-## Running it
+Download a build from [Releases](https://github.com/nviiiivn/totem/releases) (currently linux-arm64 only), or build from source:
 
 ```bash
 git clone https://github.com/nviiiivn/totem.git
 cd totem
 bun install
-bun run dev          # starts the CLI against ./totem/src/index.ts
+bun run dev
 ```
 
-Other entry points (`bun run dev:desktop`, `dev:web`, `dev:console`) are documented in the root `package.json` scripts.
+Once installed:
+
+```bash
+totem            # start the TUI in the current project
+totem run         # run a one-shot prompt
+totem providers   # configure API providers and credentials
+totem --help      # full command reference
+```
+
+Config and credentials live under `~/.config/totem/` — a completely separate path from any OpenCode install.
+
+## Status
+
+The opencode → totem rebrand is complete. The enforcement layer (Phase 2, the 8 carves) is essentially complete; Phase 4 (proving each carve against its real historical incident) is underway. See [`docs/STATE.md`](docs/STATE.md) for the live, up-to-date detail — that file is the anti-amnesia device for this project; trust it over anything else if it looks stale.
 
 ## Documentation
 
 | Doc | What it's for |
 |---|---|
-| [Wiki](https://totem.alola.lol) | The public-facing site — incident writeup, architecture, full narrative |
-| [`docs/PROJECT.md`](docs/PROJECT.md) | The project's own README — what/why, guarantees, orientation |
+| [Wiki](https://totem.alola.lol) | The full ecosystem — architecture, concepts, the whole story |
+| [`docs/PROJECT.md`](docs/PROJECT.md) | The enforcement layer's own README — what/why, guarantees |
 | [`CONSTITUTION.md`](CONSTITUTION.md) | The actual rules the system enforces |
 | [`docs/STATE.md`](docs/STATE.md) | Live handoff doc — where the project is right now |
-| [`docs/ROADMAP.md`](docs/ROADMAP.md) | The path and phases |
+| [`docs/ROADMAP.md`](docs/ROADMAP.md) | The enforcement layer's path and phases |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | What's locked, what's still open, and why |
 | [`docs/TIMELINE.md`](docs/TIMELINE.md) | The story, newest first |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contribution guidelines (inherited from upstream) |
 
 ## Attribution
 
-Forked from [anomalyco/opencode](https://github.com/anomalyco/opencode). See [`ATTRIBUTION.md`](ATTRIBUTION.md) for the full lineage. The engine, TUI, and provider plumbing are substantially upstream's work; the enforcement layer, the cartridge knowledge system, and everything under `docs/` are this fork's own.
+Forked from [anomalyco/opencode](https://github.com/anomalyco/opencode). See [`ATTRIBUTION.md`](ATTRIBUTION.md) for the full lineage.
