@@ -1,5 +1,5 @@
 // Phase 4 ("prove it") — regression suite built directly from the incident that
-// started this project: docs/from-tot3mic references `sisyphus-autopsy.md`
+// started this project: docs/ references `sisyphus-autopsy.md`
 // (the source doc, June 22 2026 session). Each test below reproduces the actual
 // round from that autopsy and asserts the corresponding carve makes it
 // structurally impossible now — not "the carve's internals pass a contrived
