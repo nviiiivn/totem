@@ -33,12 +33,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/nvii/totem"
+    "url": "https://github.com/nviiiivn/totem",
+    "directory": "totem-pole/totempole"
   },
   "bugs": {
-    "url": "https://github.com/nvii/totem/issues"
+    "url": "https://github.com/alvinunreal/oh-my-opencode-slim/issues"
   },
-  "homepage": "https://github.com/nvii/totem/packages/totempole#readme",
+  "homepage": "https://github.com/alvinunreal/oh-my-opencode-slim#readme",
   "files": [
     "dist",
     "src/companion/companion-manifest.json",
