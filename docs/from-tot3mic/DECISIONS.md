@@ -16,13 +16,12 @@ The eight mechanisms in `ROADMAP.md` Phase 2 ARE the spec for the enforcement la
 ### D4 — Project root is `/home/nvii/TOT3MIC`, git-tracked
 Everything revertible. Every change a commit. No permanent damage possible.
 
-## Open (decide before acting)
+## Locked (continued)
 
-### O1 — Substrate (THE fork conversation)
-Middle-path on OpenCode (TypeScript/Bun) vs rebuild on Aider (Python) vs true greenfield.
-- **Middle path (recommended):** keep OpenCode's foundation (engine, TUI, provider plumbing, session store), surgically remove + rebuild the failed layer (rules, enforcement, self-mod seam, inherited plugins).
-- **Honest cost of true greenfield:** OpenCode is Effect-TS (typed Services/Layers/Fibers/Streams); it has no direct Python equivalent, so a Python rewrite is a *redesign*, not a translation. None of the plugins/faces/TUI carry over. Months solo. And the language is mostly orthogonal to what actually failed (the rules/enforcement layer, not the substrate).
-- **Aider** (aider.chat) is a mature Python terminal AI coding agent — a real alternative substrate if Python is later chosen deliberately.
+### O1 — Substrate: middle path on OpenCode (TypeScript/Bun) — locked 2026-08-21
+Decided by what was actually built, not a fresh deliberation: `totem`/`tot3m` kept OpenCode's foundation (Effect-TS engine, TUI, provider plumbing, session store) and surgically rebuilt the failed layer on top (the 8 carves — see Phase 2). True greenfield (Aider/Python or otherwise) was never pursued; the language was correctly identified up front as orthogonal to what actually failed. Formally locking the decision the codebase already reflects.
+
+## Open (decide before acting)
 
 ### O2 — Amendment protocol
 How does the human change the constitution via a path the agent cannot author? The seam that failed last time. A policy decision, not a technical one.

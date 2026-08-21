@@ -45,7 +45,7 @@ See `ROADMAP.md` for the eight structural mechanisms (the "carves") that produce
 
 ## Status
 
-Pre-fork. The plan is drafted, the founding decisions are locked, the substrate is not yet chosen. See `STATE.md`.
+Forked and active. All founding decisions locked, including substrate (O1 — see `DECISIONS.md`). Phase 2 (the 8 carves) is essentially complete; Phase 4 (regression proof) is underway. See `STATE.md` for the live detail.
 
 ## Who
 
