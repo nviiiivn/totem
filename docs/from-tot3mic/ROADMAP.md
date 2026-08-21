@@ -8,7 +8,7 @@
 - [x] Lock founding decisions D1–D4.
 - [x] Build the self-describing root (this repo).
 - [x] Fork/greenlight conversation — decide substrate (O1). Locked 2026-08-21, see DECISIONS.md.
-- [ ] First public snapshot + timeline start. Timeline exists (`TIMELINE.md`, started 2026-07-28). Publishing publicly is unstarted — no GitHub auth configured, needs the human to run `gh auth login` before this can move.
+- [x] First public snapshot + timeline start. Timeline exists (`TIMELINE.md`, started 2026-07-28). Public snapshot live at github.com/nviiiivn/totem as of 2026-08-21 — replaced a stale Jul-20 placeholder with the real codebase.
 
 ## Phase 1 — Strip the sand (not started, as of 2026-08-21)
 
