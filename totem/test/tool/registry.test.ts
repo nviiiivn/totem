@@ -228,7 +228,7 @@ describe("tool.registry", () => {
     Effect.gen(function* () {
       const test = yield* TestInstance
       const customTools = path.join(test.directory, ".totem", "tools")
-      const pluginTool = pathToFileURL(path.resolve(import.meta.dir, "../../../plugin/src/tool.ts")).href
+      const pluginTool = pathToFileURL(path.resolve(import.meta.dir, "../../plugin/src/tool.ts")).href
       yield* Effect.promise(() => fs.mkdir(customTools, { recursive: true }))
       yield* Effect.promise(() =>
         Bun.write(
@@ -346,7 +346,7 @@ describe("tool.registry", () => {
     Effect.gen(function* () {
       const test = yield* TestInstance
       const customTools = path.join(test.directory, ".totem", "tools")
-      const pluginTool = pathToFileURL(path.resolve(import.meta.dir, "../../../plugin/src/tool.ts")).href
+      const pluginTool = pathToFileURL(path.resolve(import.meta.dir, "../../plugin/src/tool.ts")).href
       yield* Effect.promise(() => fs.mkdir(customTools, { recursive: true }))
       yield* Effect.promise(() =>
         Bun.write(

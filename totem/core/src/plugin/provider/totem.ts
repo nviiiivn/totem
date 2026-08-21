@@ -36,7 +36,7 @@ const Org = Schema.Struct({ id: Schema.String, name: Schema.String })
 
 function oauth(http: HttpClient.HttpClient) {
   return {
-    integrationID: Integration.ID.make("opencode"),
+    integrationID: Integration.ID.make("totem"),
     method: {
       id: methodID,
       type: "oauth",
@@ -98,18 +98,18 @@ export const TotemPlugin = define<HttpClient.HttpClient | EventV2.Service | Scop
     })
 
     yield* ctx.integration.transform((draft) => {
-      draft.update("opencode", (integration) => {
+      draft.update("totem", (integration) => {
         integration.name = "Totem"
       })
       draft.method.update(oauth(http))
-      draft.method.update({ integrationID: "opencode", method: { type: "key", label: "API key (service account)" } })
+      draft.method.update({ integrationID: "totem", method: { type: "key", label: "API key (service account)" } })
     })
 
     yield* load()
     yield* ctx.catalog.transform((catalog) => {
       for (const [providerID, item] of Object.entries(providers ?? {})) {
         catalog.provider.update(providerID, (provider) => {
-          provider.integrationID = Integration.ID.make("opencode")
+          provider.integrationID = Integration.ID.make("totem")
           if (item.name !== undefined) provider.name = item.name
           provider.api = item.npm
             ? { type: "aisdk", package: item.npm, url: item.api }
@@ -182,7 +182,7 @@ export const TotemPlugin = define<HttpClient.HttpClient | EventV2.Service | Scop
     })
 
     yield* events.subscribe(Integration.Event.ConnectionUpdated).pipe(
-      Stream.filter((event) => event.data.integrationID === Integration.ID.make("opencode")),
+      Stream.filter((event) => event.data.integrationID === Integration.ID.make("totem")),
       Stream.runForEach(() => load().pipe(Effect.andThen(ctx.catalog.reload()))),
       Effect.forkScoped({ startImmediately: true }),
     )

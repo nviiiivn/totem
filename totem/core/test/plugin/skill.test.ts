@@ -25,7 +25,7 @@ describe("SkillPlugin.Plugin", () => {
       expect(yield* skill.list()).toContainEqual(
         expect.objectContaining({
           name: "customize-totem",
-          description: expect.stringContaining("totem's own configuration"),
+          description: expect.stringContaining("Totem's own configuration"),
         }),
       )
     }),
