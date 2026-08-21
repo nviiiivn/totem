@@ -1,2 +1,4 @@
 [2026-08-21T18:11:12.349Z] [plugin] Server running on port 5173
 [2026-08-21T18:11:16.203Z] [plugin] Connected to server on attempt 2
+[2026-08-21T21:20:26.527Z] [plugin] Server not started (port 5173 in use — another instance is the leader)
+[2026-08-21T21:20:26.547Z] [plugin] Connected to server on attempt 1
