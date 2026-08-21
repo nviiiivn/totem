@@ -60,7 +60,14 @@ export async function pack(options: PackOptions): Promise<PackResult> {
       size_bytes: Buffer.byteLength(content, "utf-8"),
     })
 
-    const rawChunks = chunkMarkdown(content, { chunkSize, overlap })
+    // Files staged by the extractor (extract.ts) carry their own frontmatter
+    // (source, source_page) — pick that up instead of chunking it as body text,
+    // so page numbers survive from PDF extraction through to chunk metadata.
+    const parsed = matter(content)
+    const source = typeof parsed.data.source === "string" ? parsed.data.source : relPath
+    const sourcePage = typeof parsed.data.source_page === "number" ? parsed.data.source_page : undefined
+
+    const rawChunks = chunkMarkdown(parsed.content, { chunkSize, overlap })
     for (const raw of rawChunks) {
       const chunkId = String(seq).padStart(6, "0")
       const contentHasher = new Bun.CryptoHasher("sha256")
@@ -68,12 +75,13 @@ export async function pack(options: PackOptions): Promise<PackResult> {
 
       const frontmatter: Record<string, unknown> = {
         chunk_id: chunkId,
-        source: relPath,
+        source,
         token_count: countTokens(raw.text),
         char_count: raw.text.length,
         hash: `sha256:${contentHasher.digest("hex")}`,
       }
       if (raw.section) frontmatter.section = raw.section
+      if (sourcePage !== undefined) frontmatter.source_page = sourcePage
 
       const fileContents = matter.stringify(raw.text, frontmatter)
       await writeFile(join(chunksDir, `${chunkId}.md`), fileContents, "utf-8")
