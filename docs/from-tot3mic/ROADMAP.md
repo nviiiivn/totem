@@ -46,9 +46,13 @@ Recommended home for the enforcement layer: **in-source, firewalled** — a new 
 
 The enforcement layer has to be visible and controllable in every face (TUI, web, CLI): the STOP command, the active-directive panel, the "what's firing now" view. A rule you can't see or kill isn't enforced (G3). Web and CLI faces are unconfirmed/unwired.
 
-## Phase 4 — Prove it (not started, as of 2026-08-21 — recommended next)
+## Phase 4 — Prove it (started 2026-08-21)
 
-Regression tests built from the autopsy's failure modes. The system must fail-closed on every one of the seven original failures plus compaction amnesia. Then: the public snapshot, the blog, the "why this exists" doc. Only carve-level unit tests exist right now — none of them simulate the actual failure scenario end-to-end through the real pipeline the way it originally happened.
+Regression tests built from the autopsy's failure modes. The system must fail-closed on every one of the seven original failures plus compaction amnesia. Then: the public snapshot, the blog, the "why this exists" doc.
+
+`totem/test/sisyphus-autopsy-regression.test.ts` — 9/9 passing, one test per carve, each reproducing the literal round from `sisyphus-autopsy.md` (found at `wwwProjects/totem-wiki/docs/constitution/sisyphus-autopsy.md`) rather than a paraphrase: Round 2-3 (priority resolver), Rounds 4-8 (directive store + anti-loop, two tests), the kill-switch guarantee (session-stop, includes a grep proving `resume` is never tool-registered), "cannot self-modify" (write-guard), "retention > delivery" (efficiency-telemetry), "no meta-communication channel" (directive surface, tested at the data-accessor level, not full TUI render), and compaction amnesia (task-state, separate incident, not from this doc).
+
+Still open: this proves each carve against one concrete scenario, not exhaustive adversarial coverage. No public snapshot / blog / "why this exists" doc yet.
 
 ## The unsolved seam (carried across all phases)
 

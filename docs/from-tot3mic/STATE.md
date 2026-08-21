@@ -59,7 +59,7 @@
 
 ## What's open (do not assume)
 
-- **9 `totem run` CLI subprocess test timeouts** — unstarted. See above.
+- ~~9 `totem run` CLI subprocess test timeouts~~ — **fixed 2026-08-21.** Root cause: `cliIt.concurrent` ran 13 real subprocess boots simultaneously on this 4-core Pi (each boot from source costs ~5s transpile, measured), which occasionally exceeded even a raised timeout. Converted these 13 tests from `.concurrent` to `.live` (sequential) in `test/cli/run/run-process.test.ts`. Also bumped the harness's stale 30s default to 60s in `test/lib/cli-process.ts`. Verified: 13/13 pass, 0 fail, repeatably.
 - **Phase 1 ("strip the sand") still not done.** No `SALVAGE/` audit, no umbreality/OMO purge, no prompt-constitution removal. Some of this ground got covered incidentally by the bug-hunt above, but it was never done as its own deliberate pass.
 - **Phase 3 (wire enforcement to every face) is TUI-only.** Web/CLI faces unconfirmed.
 - **Phase 4 ("prove it") not started.** No regression suite mapped to the original 7 autopsy failure modes + compaction amnesia — only carve-level unit tests exist. This is the recommended next move (see ROADMAP.md).
