@@ -166,9 +166,9 @@ export const TotemPlugin = define<HttpClient.HttpClient | EventV2.Service | Scop
         }
       }
 
-      const item = catalog.provider.get(ProviderV2.ID.opencode)
+      const item = catalog.provider.get(ProviderV2.ID.totem)
       if (!item) return
-      const hasKey = Boolean(process.env.OPENCODE_API_KEY || connected || item.provider.request.body.apiKey)
+      const hasKey = Boolean(process.env.TOTEM_API_KEY || connected || item.provider.request.body.apiKey)
       catalog.provider.update(item.provider.id, (provider) => {
         if (!hasKey) provider.request.body.apiKey = "public"
       })

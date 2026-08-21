@@ -46,7 +46,7 @@ describe("LLMGatewayPlugin", () => {
       yield* addPlugin()
       expect((yield* catalog.provider.get(ProviderV2.ID.make("llmgateway")))?.request.headers).toEqual({
         Existing: "value",
-        "HTTP-Referer": "https://totem.ai/",
+        "HTTP-Referer": "https://github.com/nvii/totem",
         "X-Title": "totem",
         "X-Source": "totem",
       })

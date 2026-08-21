@@ -10,7 +10,7 @@ export const VercelPlugin = define({
           if (item.provider.api.type !== "aisdk") continue
           if (item.provider.api.package !== "@ai-sdk/vercel") continue
           evt.provider.update(item.provider.id, (provider) => {
-            provider.request.headers["http-referer"] = "https://totem.ai/"
+            provider.request.headers["http-referer"] = "https://github.com/nvii/totem"
             provider.request.headers["x-title"] = "totem"
           })
         }
