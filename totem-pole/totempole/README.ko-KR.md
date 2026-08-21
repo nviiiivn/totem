@@ -1,3 +1,5 @@
+> **Vendored third-party plugin.** Everything below this notice is [alvinunreal/totempole](https://github.com/alvinunreal/totempole) — not written by, or affiliated with, this fork. All links and stargazer counts point at the real upstream project.
+
 <div align="center">
   <a href="https://github.com/alvinunreal/totempole/stargazers">
     <img src="img/v2.webp" alt="totempole V2 Release" style="border-radius: 10px;">

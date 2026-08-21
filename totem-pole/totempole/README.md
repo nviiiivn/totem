@@ -1,3 +1,5 @@
+> **Vendored third-party plugin.** Everything below this notice is [alvinunreal/totempole](https://github.com/alvinunreal/totempole) — not written by, or affiliated with, this fork. It's included here to be loaded locally as a totem plugin (see `~/.config/totem/totem.json`). All links, stargazer counts, and the contributor list below point at the real upstream project. Do not read this as totem's own work.
+
 <div align="center">
   <a href="https://github.com/alvinunreal/totempole/stargazers">
     <img src="img/v2.webp" alt="totempole V2 Release" style="border-radius: 10px;">
