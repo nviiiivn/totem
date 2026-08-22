@@ -31,6 +31,8 @@ The tension resolves cleanly, and the current design is probably right: **prose 
 - **Keep it** (recommended): prose explains intent to the model; carves enforce regardless. Requires an amendment protocol — see `docs/AMENDMENT-PROTOCOL.md`.
 - **Drop it**: pure structural enforcement, no prose layer. Simpler and maximally true to D1, but loses the ability to express intent/nuance the carves can't encode.
 
+**Decided 2026-08-21 — keep it, and make it enforced.** nvii's call: the constitution should not be advisory text the model is trusted to follow. Carve 9 (`totem/src/enforcement/response-gate.ts`) now enforces the mechanically-checkable rules at `experimental.text.complete`, so a violating response is withheld rather than delivered. This resolves the D1 tension: the prose stays as the statement of intent, and code — not the model's goodwill — decides whether a response satisfies it.
+
 ## Inherited bones — keep / adapt / drop
 
 The roadmap asked for a keep/adapt/drop call on the four inherited areas.
