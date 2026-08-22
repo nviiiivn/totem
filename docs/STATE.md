@@ -79,10 +79,17 @@
 
 ## What's next
 
-1. **Phase 4 ("prove it")** — recommended next: regression tests built from the 7 autopsy failure modes + compaction amnesia, simulating the real failure scenarios through the actual pipeline, not just unit-testing each carve's internals in isolation.
-2. Investigate the 9 `totem run` CLI timeouts.
-3. Resolve provider collision on next totem restart, if still relevant.
-4. Track B — parked for now, not abandoned; pick back up when she wants to.
+Deliberately deferred to a session with full quota (2026-08-21, ran this session down chasing real bugs — don't half-research these next two under pressure):
+
+1. **Phase 1 ("strip the sand")** — never run as its own deliberate pass. Real starting questions, not yet answered: how much umbreality/OMO content is actually tangled into the *code* (not just docs) right now? Is there anything left to "remove" or did the Aug 19-21 rename/rebrand already handle it structurally? Build a `SALVAGE/` audit (keep/adapt/drop per engine/TUI/provider/session-store area) before touching anything.
+2. **O2 (amendment protocol)** — real, concrete seam found this session: there are **two constitution files** that have drifted apart — `CONSTITUTION.md` (repo root, 265 lines) and the one actually enforced at runtime, `totem/src/session/prompt/constitution.txt` (159 lines, protected by write-guard.ts). Editing the root file currently does nothing to real behavior unless someone manually syncs it — that IS the unresolved seam. **Start here, not from scratch**: `docs/totemic/amendment-protocol.md` already exists in the totem-wiki repo (`/home/nvii/wwwProjects/totem-wiki`, now a real git repo as of tonight) — read that first, it may already have her own prior thinking on this.
+
+Smaller, real, not urgent:
+- **Plugin absorption continues** — 12 of 14 personal plugins verified as real, legit repos (see this session's log below for the table); `opencode-local-ollama` confirmed real (`khalilgharbaoui/opencode-local-ollama`) after initial check wrongly said untraceable — don't trust npm's `repository` field alone, search GitHub directly. `opencode-background-agents` is still genuinely untraceable (checked 2 candidate repos, neither matched — real gap, not yet resolved). Actual fork-and-vendor work (matching totempole's treatment) hasn't started on any of them yet.
+- **5 unedited scaffold READMEs** still unwritten: `totem/README.md` ("# js"), `totem-ken/web/README.md` (Starlight starter), `totem-ken/docs/README.md` (Mintlify starter), `totem-pole/enterprise/README.md` (SolidStart starter), `totem/totem-faces/app/README.md` (pnpm template boilerplate).
+- **`publish.yml` rewrite vs. manual builds** — real CI pipeline is hardcoded `if: github.repository == 'anomalyco/totem'` (never runs on this fork) plus needs missing paid-runner/secrets. Manual local build (`totem/script/build.ts`, full matrix) works and is what produced the current GitHub release — rewriting the real pipeline is a deferred, non-urgent choice.
+- **totem-wiki**: real git repo now, but still local-only, no remote — her call whether/where to push it.
+- Track B — parked for now, not abandoned; pick back up when she wants to.
 
 ## Standing facts (machines)
 
