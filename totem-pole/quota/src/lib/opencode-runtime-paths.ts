@@ -39,7 +39,13 @@ export function getOpencodeRuntimeDirs(params?: {
   // xdg-basedir may return undefined if env is missing; provide deterministic fallbacks.
   const dataBase = env.XDG_DATA_HOME?.trim() || xdgData || join(home, ".local", "share");
   const configBase = env.XDG_CONFIG_HOME?.trim() || xdgConfig || join(home, ".config");
-  const defaultConfigDir = join(configBase, "opencode");
+  // VENDORED ADAPTATION (totem): upstream hardcodes "opencode" as the app
+  // directory. In totem the same data lives under "totem" (Global.Path uses
+  // app = "totem"), so prefer that and keep "opencode" as a fallback — a user
+  // migrating from opencode still has quota credentials in the old location.
+  const APP_DIR = "totem";
+  const LEGACY_APP_DIR = "opencode";
+  const defaultConfigDir = join(configBase, APP_DIR);
   const configuredConfigDir = env.OPENCODE_CONFIG_DIR?.trim();
   const configDir = configuredConfigDir
     ? isAbsolute(configuredConfigDir)
@@ -50,10 +56,10 @@ export function getOpencodeRuntimeDirs(params?: {
   const stateBase = env.XDG_STATE_HOME?.trim() || xdgState || join(home, ".local", "state");
 
   return {
-    dataDir: join(dataBase, "opencode"),
+    dataDir: join(dataBase, APP_DIR),
     configDir,
-    cacheDir: join(cacheBase, "opencode"),
-    stateDir: join(stateBase, "opencode"),
+    cacheDir: join(cacheBase, APP_DIR),
+    stateDir: join(stateBase, APP_DIR),
   };
 }
 
@@ -79,6 +85,19 @@ export function getOpencodeRuntimeDirCandidates(params?: {
   const configDirs: string[] = [primary.configDir];
   const cacheDirs: string[] = [primary.cacheDir];
   const stateDirs: string[] = [primary.stateDir];
+
+  // VENDORED ADAPTATION (totem): also search the legacy "opencode" locations.
+  // Subscription credentials that carry quota (opencode-go, zai-coding) often
+  // still live there for anyone who used opencode before totem, and without
+  // this the sidebar shows plain API keys but no usage percentages.
+  const dataBaseDir = env.XDG_DATA_HOME?.trim() || xdgData || join(home, ".local", "share");
+  const configBaseDir = env.XDG_CONFIG_HOME?.trim() || xdgConfig || join(home, ".config");
+  const cacheBaseDir = env.XDG_CACHE_HOME?.trim() || xdgCache || join(home, ".cache");
+  const stateBaseDir = env.XDG_STATE_HOME?.trim() || xdgState || join(home, ".local", "state");
+  dataDirs.push(join(dataBaseDir, LEGACY_APP_DIR));
+  configDirs.push(join(configBaseDir, LEGACY_APP_DIR));
+  cacheDirs.push(join(cacheBaseDir, LEGACY_APP_DIR));
+  stateDirs.push(join(stateBaseDir, LEGACY_APP_DIR));
 
   if (platform === "win32") {
     // OpenCode uses xdg-basedir; on some Windows setups that can resolve to
