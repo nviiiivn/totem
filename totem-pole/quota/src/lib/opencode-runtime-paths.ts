@@ -2,6 +2,13 @@ import { homedir } from "os";
 import { dirname, isAbsolute, join, resolve } from "path";
 import { xdgCache, xdgConfig, xdgData, xdgState } from "xdg-basedir";
 
+// VENDORED ADAPTATION (totem): upstream hardcodes "opencode" as the app
+// directory name. totem stores the same data under "totem" (Global.Path uses
+// app = "totem"); "opencode" is kept as a fallback so quota credentials from a
+// prior opencode install are still found.
+const APP_DIR = "totem"
+const LEGACY_APP_DIR = "opencode"
+
 export interface OpencodeRuntimeDirs {
   dataDir: string;
   configDir: string;
@@ -43,8 +50,6 @@ export function getOpencodeRuntimeDirs(params?: {
   // directory. In totem the same data lives under "totem" (Global.Path uses
   // app = "totem"), so prefer that and keep "opencode" as a fallback — a user
   // migrating from opencode still has quota credentials in the old location.
-  const APP_DIR = "totem";
-  const LEGACY_APP_DIR = "opencode";
   const defaultConfigDir = join(configBase, APP_DIR);
   const configuredConfigDir = env.OPENCODE_CONFIG_DIR?.trim();
   const configDir = configuredConfigDir
