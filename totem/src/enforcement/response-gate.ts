@@ -53,6 +53,30 @@ const PARTIAL_OUTPUT = [
 /** Hedging that signals an unverified claim presented as fact. */
 const HEDGE = [/\bi think\b/i, /\bprobably\b/i, /\bshould(n't)? be\b/i, /\bi believe\b/i, /\bmight be\b/i]
 
+/**
+ * Rule 5 names these verbatim: "Do not include phrases such as 'you might want to,'
+ * 'I'd suggest,' 'keep in mind,' or 'just to note' under any circumstances."
+ * The constitution enumerates them, so detection is exact rather than a judgment call.
+ */
+const UNREQUESTED_padding = [
+  /\byou might want to\b/i,
+  /\bi'?d (suggest|recommend)\b/i,
+  /\bkeep in mind\b/i,
+  /\bjust to note\b/i,
+  /\bit'?s worth noting\b/i,
+  /\bworth mentioning\b/i,
+  /\bfeel free to\b/i,
+  /\bas a (side )?note\b/i,
+]
+
+/** Rule 4: a Discursive response is capped at 2-3 sentences. */
+function countSentences(text: string): number {
+  const stripped = text
+    .replace(/```[\s\S]*?```/g, " ") // code blocks aren't prose
+    .replace(/^[-*+]\s.*$/gm, " ") // list items aren't sentences
+  return (stripped.match(/[^.!?]+[.!?]+(\s|$)/g) ?? []).length
+}
+
 export interface GateInput {
   readonly text: string
   /** Discursive responses have a length ceiling; generative ones deliberately do not. */
@@ -63,6 +87,12 @@ export interface GateInput {
   readonly technical?: boolean
   /** Skill names that were available but never invoked. */
   readonly unusedSkills?: readonly string[]
+  /**
+   * Rule 4 sentence ceiling. Only set for responses classified Discursive —
+   * Generative/Evaluative work is explicitly exempt from the limit, so leaving
+   * this undefined is the safe default and no length check runs.
+   */
+  readonly maxSentences?: number
 }
 
 export function inspect(input: GateInput): Violation[] {
@@ -90,6 +120,29 @@ export function inspect(input: GateInput): Violation[] {
         detail: `Defers work to the user: "${hit[0]}". Deliver the complete result; never instruct the user to apply part of it by hand.`,
       })
       break
+    }
+  }
+
+  for (const pattern of UNREQUESTED_padding) {
+    const hit = pattern.exec(text)
+    if (hit) {
+      out.push({
+        rule: "Rule 5 — unrequested content",
+        severity: "certain",
+        detail: `Contains "${hit[0]}" — Rule 5 names this phrasing explicitly. Deliver what was asked; drop the suggestion/caveat framing.`,
+      })
+      break
+    }
+  }
+
+  if (input.maxSentences !== undefined) {
+    const sentences = countSentences(text)
+    if (sentences > input.maxSentences) {
+      out.push({
+        rule: "Rule 4 — length",
+        severity: "certain",
+        detail: `${sentences} sentences for a discursive answer, ceiling is ${input.maxSentences}. Cut it down; do not announce that you are cutting it down.`,
+      })
     }
   }
 

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { evaluate, inspect, MAX_ATTEMPTS, reset } from "../src/enforcement/response-gate"
+import { classify, isTechnical } from "../src/enforcement/classify"
 
 describe("response gate — certain violations (refused outright)", () => {
   test("sycophancy is caught", () => {
@@ -88,5 +89,51 @@ describe("response gate — enforcement and the anti-wall-banging cap", () => {
     reset(b)
     evaluate(a, { text: "You're right." })
     expect(evaluate(b, { text: "You're right." }).replacement).toContain("attempt 1/")
+  })
+})
+
+describe("response gate — Rule 5 unrequested content + Rule 4 sentence ceiling", () => {
+  test("phrases Rule 5 names verbatim are refused", () => {
+    for (const bad of ["You might want to restart it.", "I'd suggest checking the logs.", "Keep in mind the cache.", "Just to note, it's cached."]) {
+      const v = inspect({ text: bad })
+      expect(v.some((x) => x.severity === "certain" && x.rule.includes("Rule 5"))).toBe(true)
+    }
+  })
+
+  test("discursive answers over the sentence ceiling are refused", () => {
+    const long = "One. Two. Three. Four. Five. Six. Seven."
+    expect(inspect({ text: long, maxSentences: 5 }).some((x) => x.rule.includes("Rule 4"))).toBe(true)
+  })
+
+  test("no ceiling is applied when the query isn't discursive", () => {
+    const long = "One. Two. Three. Four. Five. Six. Seven."
+    expect(inspect({ text: long }).some((x) => x.rule.includes("Rule 4"))).toBe(false)
+  })
+
+  test("code blocks and lists don't count toward the sentence ceiling", () => {
+    const withCode = "Here.\n```\na. b. c. d. e. f. g.\n```\n- x. y. z."
+    expect(inspect({ text: withCode, maxSentences: 5 }).some((x) => x.rule.includes("Rule 4"))).toBe(false)
+  })
+})
+
+describe("classifier", () => {
+  test("generative wins over discursive on conflict", () => {
+    expect(classify("explain how to build the parser")).toBe("generative")
+    expect(classify("fix the header")).toBe("generative")
+  })
+
+  test("plain questions are discursive", () => {
+    expect(classify("why does that happen?")).toBe("discursive")
+    expect(classify("what is a cartridge")).toBe("discursive")
+  })
+
+  test("ambiguous input is not force-classified", () => {
+    expect(classify("hmm")).toBe("unknown")
+    expect(classify("")).toBe("unknown")
+  })
+
+  test("technical detection drives the research rule", () => {
+    expect(isTechnical("how does the bun compiler cache work")).toBe(true)
+    expect(isTechnical("how are you feeling")).toBe(false)
   })
 })
