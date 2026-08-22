@@ -77,7 +77,10 @@ Handoff doc for Claude sessions. Written from STATE.md/ROADMAP/wiki audit sessio
 
 13. Desktop face — DECIDE LATER, explore now:
     - Options:
-      (a) adopt openchamber (alvinunreal) — mature OpenCode GUI: sessions, worktrees,
+      (a) adopt OpenChamber — github.com/openchamber/openchamber (the OG project:
+          9k stars, pushed daily, openchamber.dev). NOTE: alvinunreal/openchamber is
+          just a stale fork of it (0 commits ahead, 951 behind) — not his project.
+          Mature OpenCode GUI: sessions, worktrees,
           MCP UI, providers, multi-run, voice, tunnels. Tracks CURRENT opencode-server.
       (b) port opencode's own desktop variant if usable at fork point.
       (c) build minimal own later.
