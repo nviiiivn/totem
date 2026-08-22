@@ -11,10 +11,10 @@
     "./.totem/plugins/constitution-gate.ts",
     // Vendored, not npm — see totem-pole/quota/VENDORED.md. Provider quota +
     // token usage. In-repo so it keeps working if upstream moves or disappears.
-    "./totem-pole/quota/src/index.ts",
+    "./totem-pole/quota",
     // Vendored from nvii's own nviiiivn/lolcat-theme — see totem-pole/lolcat/VENDORED.md.
     // Animated rainbow logo; toggle with ctrl+l or the lolcat.toggle command.
-    "./totem-pole/lolcat/src/tui.tsx",
+    "./totem-pole/lolcat",
     "./.totem/plugins/session-transcript.mjs",
     "opencode-mem",
     "opencode-pty",
