@@ -375,6 +375,16 @@
         "vite": "catalog:",
       },
     },
+    "totem-pole/lolcat": {
+      "name": "@totem-ai/lolcat",
+      "version": "0.0.0",
+      "dependencies": {
+        "@opentui/core": "catalog:",
+        "@opentui/keymap": "catalog:",
+        "@opentui/solid": "catalog:",
+        "solid-js": "catalog:",
+      },
+    },
     "totem-pole/quota": {
       "name": "@totem-ai/quota",
       "version": "0.0.0",
@@ -2754,6 +2764,8 @@
     "@totem-ai/http-recorder": ["@totem-ai/http-recorder@workspace:totem-adze/http-recorder"],
 
     "@totem-ai/llm": ["@totem-ai/llm@workspace:totem/llm"],
+
+    "@totem-ai/lolcat": ["@totem-ai/lolcat@workspace:totem-pole/lolcat"],
 
     "@totem-ai/plugin": ["@totem-ai/plugin@workspace:totem/plugin"],
 
