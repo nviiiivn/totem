@@ -124,8 +124,18 @@ export const TuiThreadCommand = cmd({
       .option("demo", {
         type: "boolean",
         hidden: true,
+      })
+      .option("lolcat", {
+        type: "boolean",
+        describe: "force the lolcat rainbow logo on/off for this session (--no-lolcat to disable)",
       }),
   handler: async (args) => {
+    // Session-level override for the lolcat-theme plugin (totem-pole/lolcat).
+    // Deliberately an env var rather than a kv write: this must NOT persist, so
+    // the saved lolcat_on preference still wins on the next run.
+    if (args.lolcat !== undefined) {
+      process.env["TOTEM_LOLCAT"] = args.lolcat ? "1" : "0"
+    }
     if (args.replay === true) {
       UI.error("--replay is not supported; replay is enabled by default")
       process.exitCode = 1

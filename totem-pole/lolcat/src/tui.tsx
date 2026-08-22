@@ -14,7 +14,13 @@ const KV_KEY = "lolcat_on"
 // Pattern source: totem feature-plugins/home/tips.tsx (commands) +
 // feature-plugins/system/plugins.tsx (array bindings).
 function HomeLogoSwitch(props: { api: import("./types").TuiPluginApi }) {
-  const [on, setOn] = createSignal(props.api.kv.get(KV_KEY, true))
+  // --lolcat / --no-lolcat set TOTEM_LOLCAT for this session only (see
+  // totem/src/cli/cmd/tui.ts). It overrides the saved preference without
+  // writing to kv, so the next run without the flag goes back to whatever
+  // was toggled with ctrl+l.
+  const override = process.env["TOTEM_LOLCAT"]
+  const initial = override === "1" ? true : override === "0" ? false : props.api.kv.get(KV_KEY, true)
+  const [on, setOn] = createSignal(initial)
 
   const toggle = () => {
     const next = !on()
