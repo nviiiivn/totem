@@ -8,6 +8,7 @@
   // not optional extras. Deliberately excluded: opencode-cache-stats (fails to
   // load — "must default export an object with server()"; re-add when fixed).
   "plugin": [
+    "./.totem/plugins/constitution-gate.ts",
     "./.totem/plugins/session-transcript.mjs",
     "opencode-mem",
     "opencode-pty",
