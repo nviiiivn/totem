@@ -150,23 +150,25 @@ function draw(
     fg: ColorInput
     shadow: ColorInput
     attrs?: number
+    rainbow?: { at: (i: number) => { fg: ColorInput; shadow: ColorInput }; stride: number }
   },
 ) {
   let x = input.left
   for (const cell of cells(row)) {
+    const color = input.rainbow?.at(input.top * input.rainbow.stride + x)
     if (cell.mark === "full" || cell.mark === "mix") {
-      push(lines, x, input.top, cell.char, input.fg, input.shadow, input.attrs)
+      push(lines, x, input.top, cell.char, color?.fg ?? input.fg, color?.shadow ?? input.shadow, input.attrs)
       x += 1
       continue
     }
 
     if (cell.mark === "top") {
-      push(lines, x, input.top, cell.char, input.shadow, undefined, input.attrs)
+      push(lines, x, input.top, cell.char, color?.shadow ?? input.shadow, undefined, input.attrs)
       x += 1
       continue
     }
 
-    push(lines, x, input.top, cell.char, input.fg, undefined, input.attrs)
+    push(lines, x, input.top, cell.char, color?.fg ?? input.fg, undefined, input.attrs)
     x += 1
   }
 }
@@ -184,6 +186,9 @@ function build(input: SplashWriterInput, kind: "entry" | "exit", ctx: Scrollback
     const mark = go.right.slice(1)
     const top = 1
     const body_left = (mark[0]?.length ?? 0) + 2
+    const rainbow = input.theme.rainbow
+      ? { at: input.theme.rainbow, stride: (mark[0]?.length ?? 0) + 1 }
+      : undefined
 
     for (let i = 0; i < mark.length; i += 1) {
       draw(lines, mark[i] ?? "", {
@@ -191,6 +196,7 @@ function build(input: SplashWriterInput, kind: "entry" | "exit", ctx: Scrollback
         top: top + i,
         fg: left,
         shadow: leftShadow,
+        rainbow,
       })
     }
 
@@ -214,6 +220,9 @@ function build(input: SplashWriterInput, kind: "entry" | "exit", ctx: Scrollback
     const body_left = (mark[0]?.length ?? 0) + 2
     const session = "Session  "
     const label = "Continue "
+    const rainbow = input.theme.rainbow
+      ? { at: input.theme.rainbow, stride: (mark[0]?.length ?? 0) + 1 }
+      : undefined
 
     for (let i = 0; i < mark.length; i += 1) {
       draw(lines, mark[i] ?? "", {
@@ -221,6 +230,7 @@ function build(input: SplashWriterInput, kind: "entry" | "exit", ctx: Scrollback
         top: top + i,
         fg: left,
         shadow: leftShadow,
+        rainbow,
       })
     }
 

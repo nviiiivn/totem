@@ -21,6 +21,7 @@ export type RunSplashTheme = {
   right: ColorInput
   leftShadow: ColorInput
   rightShadow: ColorInput
+  rainbow?: (i: number) => { fg: ColorInput; shadow: ColorInput }
 }
 
 export type RunFooterTheme = {
@@ -486,6 +487,26 @@ function quantizeTheme(theme: TuiThemeCurrent, indexed: RGBA[]): TuiThemeCurrent
   }
 }
 
+const RAINBOW_FREQ = 0.3
+
+// lolcat-style per-cell color: sine waves per channel, index i is the
+// sequential cell position across the mark (row-major, one stride per row).
+function rainbowRGBA(i: number): RGBA {
+  const wave = (offset: number) => Math.sin(RAINBOW_FREQ * i + offset) * 0.5 + 0.5
+  return RGBA.fromValues(wave(0), wave((Math.PI * 2) / 3), wave((Math.PI * 4) / 3), 1)
+}
+
+function rainbowShadow(color: RGBA): RGBA {
+  return RGBA.fromValues(color.r * 0.25, color.g * 0.25, color.b * 0.25, 1)
+}
+
+function rainbowTheme(indexed: RGBA[]): (i: number) => { fg: ColorInput; shadow: ColorInput } {
+  return (i) => {
+    const color = rainbowRGBA(i)
+    return { fg: nearestIndexed(indexed, color), shadow: nearestIndexed(indexed, rainbowShadow(color)) }
+  }
+}
+
 function splashTheme(theme: TuiThemeCurrent, indexed: RGBA[]): RunSplashTheme {
   const left = nearestIndexed(indexed, theme.textMuted)
   const right = nearestIndexed(indexed, theme.text)
@@ -494,6 +515,7 @@ function splashTheme(theme: TuiThemeCurrent, indexed: RGBA[]): RunSplashTheme {
     right,
     leftShadow: splashShadow(indexed, theme.background, left, 0.14),
     rightShadow: splashShadow(indexed, theme.background, right, 0.14),
+    rainbow: rainbowTheme(indexed),
   }
 }
 
@@ -634,6 +656,10 @@ export const RUN_THEME_FALLBACK: RunTheme = {
     right: fallbackSplashRight,
     leftShadow: splashShadow(fallbackSplashIndexed, RGBA.fromValues(0, 0, 0, 0), fallbackSplashLeft, 0.14),
     rightShadow: splashShadow(fallbackSplashIndexed, RGBA.fromValues(0, 0, 0, 0), fallbackSplashRight, 0.14),
+    rainbow: (i) => {
+      const color = rainbowRGBA(i)
+      return { fg: color, shadow: rainbowShadow(color) }
+    },
   },
   block: {
     highlight: seed.highlight,
