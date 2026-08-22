@@ -15,6 +15,14 @@ const PROTECTED_PATTERNS: RegExp[] = [
   /\/session\/prompt\/[^/]+\.txt$/,
   // this enforcement module and any future siblings in it
   /\/enforcement\//,
+  // The repo-root CONSTITUTION.md — the human-facing copy of the same document.
+  // Found unprotected 2026-08-21 (O2 audit): constitution.txt was blocked but this
+  // was writable, so the agent could rewrite the document the HUMAN reads and
+  // reasons about while runtime behavior silently stayed on the old rules. That
+  // divergence is arguably worse than editing the enforced copy, because it
+  // corrupts the human's model of what the rules are without changing anything
+  // observable. Both copies are now equally read-only to the agent.
+  /(^|\/)CONSTITUTION\.md$/,
 ]
 
 export class ProtectedPathError extends Error {

@@ -10,9 +10,13 @@
 - [x] Fork/greenlight conversation — decide substrate (O1). Locked 2026-08-21, see DECISIONS.md.
 - [x] First public snapshot + timeline start. Timeline exists (`TIMELINE.md`, started 2026-07-28). Public snapshot live at github.com/nviiiivn/totem as of 2026-08-21 — replaced a stale Jul-20 placeholder with the real codebase.
 
-## Phase 1 — Strip the sand (not started, as of 2026-08-21)
+## Phase 1 — Strip the sand (audited 2026-08-21 — see `SALVAGE.md`)
 
-No `SALVAGE/` audit exists yet, no umbreality/OMO purge has happened, and the prompt-constitution hasn't been removed. A test-suite bug hunt on 2026-08-19 to 21 incidentally surfaced and fixed some inherited-bones debt (rename artifacts from the opencode→totem fork — see `STATE.md`), but that was a side effect of test triage, not a deliberate Phase 1 pass.
+**Ran as a deliberate pass on 2026-08-21. Outcome: 4 of 6 items already done or moot, 1 open decision for the human, 1 (the audit itself) now complete.**
+
+The items below were written before the Aug 19–21 rename/rebrand and vendoring work. Re-verified against the real tree: **umbreality has zero code references** (0 files across `.ts/.tsx/.js/.json`; all 11 repo hits are docs), and OMO isn't tangled either (one historical code *comment*, plus the vendored `totem-pole/totempole/` legitimately citing its own upstream lineage). Self-eating seams are closed by carve 4. The gemma4 timeout fix is in place.
+
+Still open from Phase 1: **whether to keep the prose constitution at all** (item 3 below) — a real decision for nvii, not the agent. Full evidence, the keep/adapt/drop call on every inherited area, and the honest list of what was *not* audited: **[`SALVAGE.md`](SALVAGE.md)**.
 
 Once a substrate is forked, surgically remove what poisoned the last system and audit what's inherited:
 
@@ -56,4 +60,6 @@ Still open: this proves each carve against one concrete scenario, not exhaustive
 
 ## The unsolved seam (carried across all phases)
 
-**The amendment protocol (O2).** Who changes the constitution, and via what path the agent cannot author? The source post-mortem names it: "only God(s)." This is a policy decision about the human's own authority, and it is exactly the seam that failed last time. It stays open and flagged until the human decides it.
+**The amendment protocol (O2).** Who changes the constitution, and via what path the agent cannot author? The source post-mortem names it: "only God(s)." This is a policy decision about the human's own authority, and it is exactly the seam that failed last time.
+
+**Audited 2026-08-21 — structural half now closed, policy half awaiting nvii. See [`AMENDMENT-PROTOCOL.md`](AMENDMENT-PROTOCOL.md).** Summary: "a path the agent cannot author" turned out to be *already* guaranteed twice over (the constitution is compiled into the binary at build time, and write-guard blocks the source file). But the audit found a real hole — the repo-root `CONSTITUTION.md` was writable by the agent, meaning it could have rewritten the document the *human* reads while enforced behavior silently stayed unchanged. That's now protected, plus a sync test that fails loudly if the two copies ever drift. What remains is the human process (versioning, tagging, rebuild discipline) — proposed, not yet ratified.
