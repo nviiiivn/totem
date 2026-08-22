@@ -1,0 +1,13 @@
+{
+  // TUI plugins load from THIS file, not totem.jsonc — the TUI config loader
+  // reads `.totem/tui.{json,jsonc}` (ConfigPaths.fileInDirectory(dir, "tui")).
+  // A TUI plugin listed only in totem.jsonc is silently never loaded, which is
+  // exactly why ctrl+l did nothing before this file existed.
+  //
+  // Both entries point at package DIRECTORIES, not source files: the loader
+  // resolves the TUI half through each package.json's `exports["./tui"]`.
+  "plugin": [
+    "./totem-pole/lolcat",
+    "./totem-pole/quota"
+  ]
+}
