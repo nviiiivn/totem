@@ -51,3 +51,30 @@ Proposed, mirroring the Umbreality protocol's "absolutes":
 The process above deliberately has **no approval gate** — you are the sole authority, so a review board would be theater. If you ever want a real gate (e.g. a second machine, a second person, or a cooling-off period before a constitution commit can be tagged), that is a genuine decision and it belongs in `DECISIONS.md`, not here.
 
 This document stays a proposal until you say otherwise.
+
+---
+
+## Carve 9 — what the gate actually enforces (2026-08-21)
+
+Honest scope, because a gate that *looks* complete while half of it is dead is worse than a small one that works.
+
+**Enforced live, verified by forcing real violations through a real session:**
+
+| Check | Rule | Action |
+|---|---|---|
+| Sycophancy ("you're right", "my apologies", "great question") | 6 / 18 | **Refused** |
+| Phrases Rule 5 names verbatim ("keep in mind", "I'd suggest", "you might want to", "just to note") | 5 | **Refused** |
+| Deferring work to the user ("add this to your file") | 3 | **Refused** |
+| Elided code (`// ...rest of the implementation`) | 3 | **Refused** |
+
+A refused response **never reaches the user** — `experimental.text.complete`'s return value *is* the delivered text, so the violation replaces it and the model must rewrite.
+
+**Anti-wall-banging:** three strikes on the same check, then the gate escalates and *ships* rather than looping. Burning credits against a wall it cannot climb is treated as its own failure, not as diligence.
+
+**Written and unit-tested, but NOT active yet** — these need to know what was asked, which this hook cannot currently supply: Rule 4's discursive length ceiling, and Rule 2's research/citation/hedging checks. They are implemented in `response-gate.ts` and covered by `test/response-gate.test.ts`; only the wiring is missing.
+
+**Two approaches were tried and both failed. Recorded so nobody burns the time again:**
+1. `experimental.chat.messages.transform` — context never arrived; the dependent checks silently never fired.
+2. `client.session.messages()` from inside `text.complete` — **re-entrant**. The hook fires while the session is still streaming, so asking that session for its own messages hangs the response. (The session-transcript plugin can do this only because it runs at `session.compacting`, a different lifecycle point.)
+
+A third approach would be to pass the query down through `processor.ts` at the point the hook is triggered — an engine change rather than a plugin change. Not attempted yet.
