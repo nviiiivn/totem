@@ -9,8 +9,13 @@ const TOWER_URL = process.env.TOTEM_VISION_BASE_URL ?? "http://localhost:11434"
 let towerAvailable = false
 beforeAll(async () => {
   try {
+    // Reachability alone isn't enough: localhost usually HAS ollama but not a
+    // vision model, so these would run and fail instead of skipping. Require the
+    // actual model to be present.
     const res = await fetch(`${TOWER_URL}/api/tags`, { signal: AbortSignal.timeout(3000) })
-    towerAvailable = res.ok
+    if (!res.ok) throw new Error("unreachable")
+    const body = (await res.json()) as { models?: { name?: string }[] }
+    towerAvailable = (body.models ?? []).some((m) => (m.name ?? "").includes("deepseek-ocr"))
   } catch {
     towerAvailable = false
   }
