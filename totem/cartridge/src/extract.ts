@@ -13,7 +13,10 @@ export interface VisionOptions {
 // confirmed broken even on plain text prompts, not image-specific). Tower has
 // deepseek-ocr:3b, purpose-built for this and verified working end-to-end.
 const DEFAULT_VISION_MODEL = "deepseek-ocr:3b"
-const DEFAULT_BASE_URL = "http://192.168.86.24:11434"
+// Vision runs on whatever ollama host is configured. Defaults to localhost so a
+// fresh clone works without knowing anyone's network; point TOTEM_VISION_BASE_URL
+// at a GPU box (the Tower here) for real speed.
+const DEFAULT_BASE_URL = process.env.TOTEM_VISION_BASE_URL ?? "http://localhost:11434"
 const DEFAULT_TRANSCRIBE_PROMPT = "What text is in this image?"
 
 // Local VLM call. CPU-only inference on a Pi is slow (seconds to tens of

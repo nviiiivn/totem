@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-28
 **Status:** Diagnosed, root cause confirmed. NOT YET FIXED (no changes applied — fix pending user direction).
-**Machines:** Open WebUI on AITP (192.168.86.21, Docker :8901) ↔ Ollama on Tower (192.168.86.24, blavksaba, :11434)
+**Machines:** Open WebUI on AITP (<aitp-ip>, Docker :8901) ↔ Ollama on Tower (<tower-ip>, <tower-hostname>, :11434)
 **Severity:** Functional break, not a crash. Ollama + network are healthy.
 
 ---
@@ -76,7 +76,7 @@ Ollama returns 404 with that body for any non-existent model name.
 |---|---|---|
 | `ollama.service` on Tower | active, enabled, up 1d5h | `systemctl is-active ollama` → active |
 | Ollama bind | `0.0.0.0:11434` (reachable LAN-wide) | `ss -tln` + systemd override `OLLAMA_HOST=0.0.0.0:11434` |
-| Network AITP → Tower | working | Tower ollama logs show `POST /api/chat` from `192.168.86.21` arriving |
+| Network AITP → Tower | working | Tower ollama logs show `POST /api/chat` from `<aitp-ip>` arriving |
 | Open WebUI container | running, `:8901->8080` | `docker ps` |
 | Open WebUI model polling | working | `GET /api/models → 200` in container logs |
 | Tower disk | 351 GB free on `/home` | `df -h` (82% used, not a blocker) |
@@ -89,13 +89,13 @@ Ollama returns 404 with that body for any non-existent model name.
 ### A. Dead first entry in `OLLAMA_BASE_URLS` (harmless noise, optional cleanup)
 Open WebUI container env:
 ```
-OLLAMA_BASE_URLS=http://host.docker.internal:11434;http://192.168.86.24:11434
+OLLAMA_BASE_URLS=http://host.docker.internal:11434;http://<tower-ip>:11434
 ```
 `host.docker.internal` **does not resolve on Linux Docker** by default. Container logs repeat:
 ```
 ERROR open_webui.routers.ollama - Connection error: Cannot connect to host host.docker.internal:11434 ... [Name or service not known]
 ```
-This is **non-fatal** — Open WebUI falls back to the second URL (`192.168.86.24:11434`) which works. But it spams the logs and slows model refresh. Fix: either drop the first entry or add `extra_hosts: ["host.docker.internal:host-gateway"]` to the compose.
+This is **non-fatal** — Open WebUI falls back to the second URL (`<tower-ip>:11434`) which works. But it spams the logs and slows model refresh. Fix: either drop the first entry or add `extra_hosts: ["host.docker.internal:host-gateway"]` to the compose.
 
 ### B. Umbreality `umb-api` is part of the 404 spam
 `UAI_MODEL=dolphin3:8b` in `/home/nvii/UMBREALITY/umbreality-ai/docker-compose.yml` (and `CREDENTIALS+INFRASTRUCTURE.md`). Since `dolphin3:8b` is gone, umb-api requests also 404 against Tower. Fixing the model fixes this too. If you switch umb-api to a different default, update both files.
@@ -108,7 +108,7 @@ Restores "working like 2 days ago" with the least effort. ~5 GB pull, ~2–5 min
 
 ### Step 1 — Re-pull the default model on Tower
 ```bash
-ssh nvii@192.168.86.24      # password: okioki  (or key auth)
+ssh nvii@<tower-ip>      # password: okioki  (or key auth)
 ollama pull dolphin3:8b
 ollama list | grep dolphin3   # confirm present
 ```
@@ -130,7 +130,7 @@ curl -s -o /dev/null -w "HTTP %{http_code}\n" http://localhost:11434/api/chat \
 ### Step 4 (optional) — Clear the harmless log noise
 Edit Open WebUI's compose env to drop the dead URL, or add `host-gateway`. If the compose lives at the standard Open WebUI path, set:
 ```
-OLLAMA_BASE_URLS=http://192.168.86.24:11434
+OLLAMA_BASE_URLS=http://<tower-ip>:11434
 ```
 Then `docker compose up -d open-webui` (or `docker restart open-webui`).
 
@@ -163,10 +163,10 @@ Old chats still reference deleted names and must be re-pointed individually.
 
 ```bash
 # 1. Model exists on Tower
-ssh nvii@192.168.86.24 'ollama list | grep -E "dolphin3|<chosen-model>"'
+ssh nvii@<tower-ip> 'ollama list | grep -E "dolphin3|<chosen-model>"'
 
 # 2. Ollama serves it
-ssh nvii@192.168.86.24 'curl -s -o /dev/null -w "%{http_code}\n" http://localhost:11434/api/chat -d "{\"model\":\"dolphin3:8b\",\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}],\"stream\":false}"'
+ssh nvii@<tower-ip> 'curl -s -o /dev/null -w "%{http_code}\n" http://localhost:11434/api/chat -d "{\"model\":\"dolphin3:8b\",\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}],\"stream\":false}"'
 # expect 200
 
 # 3. Open WebUI log noise stopped (if you cleaned OLLAMA_BASE_URLS)
@@ -174,7 +174,7 @@ docker logs open-webui --tail 20 2>&1 | grep -i "host.docker.internal"
 # expect: no new lines
 
 # 4. No more 404 spam from .21 in Tower ollama logs
-ssh nvii@192.168.86.24 'journalctl -u ollama --since "2 min ago" --no-pager | grep "404"'
+ssh nvii@<tower-ip> 'journalctl -u ollama --since "2 min ago" --no-pager | grep "404"'
 # expect: empty (after a real chat with a valid model)
 ```
 
@@ -182,14 +182,14 @@ ssh nvii@192.168.86.24 'journalctl -u ollama --since "2 min ago" --no-pager | gr
 
 ## ACCESS / COMMANDS REFERENCE (from CREDENTIALS+INFRASTRUCTURE.md)
 
-- Tower SSH: `nvii@192.168.86.24` (key auth; password `okioki` via sshpass works)
-- AITP (this box): `nvii@192.168.86.21`
+- Tower SSH: `nvii@<tower-ip>` (key auth; password `okioki` via sshpass works)
+- AITP (this box): `nvii@<aitp-ip>`
 - Open WebUI: Docker container `open-webui`, host port `8901`, domain `ai.alola.lol` (Caddy 1 → :8901)
-- Ollama URL used by both Open WebUI and umb-api: `http://192.168.86.24:11434`
+- Ollama URL used by both Open WebUI and umb-api: `http://<tower-ip>:11434`
 - Umbreality API: Docker container `umb-api`, host port `8910`, default model env `UAI_MODEL`
 - sshpass one-liner for Tower from any box:
   ```bash
-  SSHPASS=okioki sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null nvii@192.168.86.24 '<cmd>'
+  SSHPASS=okioki sshpass -e ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null nvii@<tower-ip> '<cmd>'
   ```
 
 ---

@@ -4,7 +4,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { extractImage, rasterizePdf, transcribeImageFile } from "../src/extract"
 
-const TOWER_URL = "http://192.168.86.24:11434"
+const TOWER_URL = process.env.TOTEM_VISION_BASE_URL ?? "http://localhost:11434"
 
 let towerAvailable = false
 beforeAll(async () => {

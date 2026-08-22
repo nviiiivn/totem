@@ -441,7 +441,7 @@ These need adaptation but have high-value components.
 - Source: lmstudio.ai
 - Type: GUI to run open models locally
 - What: Local model runner that integrates with IDEs.
-- Action: OPTIONAL. Already have Ollama (192.168.86.24:11434). LM Studio could be alternative local model provider.
+- Action: OPTIONAL. Already have Ollama (<tower-ip>:11434). LM Studio could be alternative local model provider.
 
 ### 63. penpot.app
 - Source: penpot.app

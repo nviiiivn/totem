@@ -29,7 +29,7 @@
 
 **nes-cartridge knowledge system: built and proven end-to-end.** New package `totem/cartridge` (`@totem-ai/cartridge`), 20/20 tests, no mocks — real ollama calls throughout:
 - Packer (`chunk.ts`, `embed.ts`, `npy.ts`, `manifest.ts`, `pack.ts`, `verify.ts`, `cli.ts`): markdown-aware recursive chunker → embeds via local `nomic-embed-text` → writes spec-exact `.nescart` format (real `.npy` binary writer, manifest schema validation) → `verify` re-checks hashes/token-counts/row-counts against disk, not just presence.
-- Extractor (`extract.ts`): PDF → `pdftoppm` (poppler-utils, now installed on the Pi) → page images → vision transcription. **Do not use `moondream` on this Pi's local ollama** — confirmed broken (garbage output even on plain text prompts, likely an ollama 0.24.0/ARM template incompatibility). Default is now `deepseek-ocr:3b` on the **Tower** (`http://192.168.86.24:11434`), confirmed working via direct OCR test. Quality note: not perfectly deterministic, occasional word-level transcription slips.
+- Extractor (`extract.ts`): PDF → `pdftoppm` (poppler-utils, now installed on the Pi) → page images → vision transcription. **Do not use `moondream` on this Pi's local ollama** — confirmed broken (garbage output even on plain text prompts, likely an ollama 0.24.0/ARM template incompatibility). Default is now `deepseek-ocr:3b` on the **Tower** (`http://<tower-ip>:11434`), confirmed working via direct OCR test. Quality note: not perfectly deterministic, occasional word-level transcription slips.
 - Translator (`translate.ts`): separate text-model pass (`llama3.2:3b`, local) for translation — deliberately not the VLM's job, small VLMs translate worse than dedicated text models.
 - `source_page` threads correctly from PDF page → extracted markdown frontmatter → packed chunk frontmatter (proven with a real 2-page test PDF, full pipeline).
 - Not yet done: wiring this in as a live totem plugin/tool (the README's "planned" `cartridge` tool integration) — right now it's a standalone CLI only.
@@ -93,8 +93,8 @@ Smaller, real, not urgent:
 
 ## Standing facts (machines)
 
-- **AITP** — Pi5 16GB, `nvii@192.168.86.21` (hostname `ai-tp`), totem-only. Local bash. CPU-only (no CUDA); only ≤3B models run at chat speed. Now keeps: ollama + nomic-embed-text + llama3.2:3b (big models trimmed — Pi can't run them). `moondream` was pulled Aug 20 and confirmed broken (do not use). `poppler-utils` installed Aug 21 (needed for PDF rasterization in the cartridge extractor).
-- **TOWER** — i7 / 20GB GPU / 64GB RAM, `nvii@192.168.86.24` (hostname `blavksaba`), opencode + ollama host. Shell is **fish** — wrap remote commands in `bash -c`. SSH auth details live in the human's DocVault. 11 models: 6 agent-* (tool-wrapped: agent-deepseek-r1-32b, agent-gemma4-12b/26b, agent-llama3.1-8b, agent-phi4-14b, agent-qwen3.6-27b) + 4 nomic-embed-* + gemma4:12b base.
+- **AITP** — Pi5 16GB, `nvii@<aitp-ip>` (hostname `ai-tp`), totem-only. Local bash. CPU-only (no CUDA); only ≤3B models run at chat speed. Now keeps: ollama + nomic-embed-text + llama3.2:3b (big models trimmed — Pi can't run them). `moondream` was pulled Aug 20 and confirmed broken (do not use). `poppler-utils` installed Aug 21 (needed for PDF rasterization in the cartridge extractor).
+- **TOWER** — i7 / 20GB GPU / 64GB RAM, `nvii@<tower-ip>` (hostname `<tower-hostname>`), opencode + ollama host. Shell is **fish** — wrap remote commands in `bash -c`. SSH auth details live in the human's DocVault. 11 models: 6 agent-* (tool-wrapped: agent-deepseek-r1-32b, agent-gemma4-12b/26b, agent-llama3.1-8b, agent-phi4-14b, agent-qwen3.6-27b) + 4 nomic-embed-* + gemma4:12b base.
 - Architecture is split and correct: Pi = runs Totem (client); Tower = runs the models.
 - API keys + SSH creds live in the human's DocVault (`/home/nvii/DocVault/AI.credentials.md`, `/home/nvii/DocVault/CREDENTIALS+INFRASTRUCTURE.md`).
 

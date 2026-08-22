@@ -12,8 +12,8 @@ Handoff doc for Claude sessions. Written from STATE.md/ROADMAP/wiki audit sessio
 - Tests run from package dirs (e.g. `totem/`), NEVER repo root — root has a deliberate guard that exits 1.
 - Branch names: max three words, hyphen-separated, no slashes or `feat/` prefixes.
 - Commits: conventional — `type(scope): summary` (feat/fix/docs/chore/refactor/test).
-- Machines: totem client on Pi5 (nvii@192.168.86.21), ollama on Tower
-  (nvii@192.168.86.24, fish shell — wrap commands in `bash -c`).
+- Machines: totem client on Pi5 (nvii@<aitp-ip>), ollama on Tower
+  (nvii@<tower-ip>, fish shell — wrap commands in `bash -c`).
 
 ## A. Truth-telling (docs match reality)
 
