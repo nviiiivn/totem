@@ -6,6 +6,30 @@ const TILE_B = "▜▘▛▌▜▘█▌▛▛▌  "
 const TILE_C = "▐▖▙▌▐▖▙▖▌▌▌  "
 const TILE = TILE_A.length
 const FG = "#6d6d6d"
+
+// Rainbow for the boot splash. Self-contained on purpose: this component mounts
+// before ThemeProvider exists (see note below), so it cannot read theme colors —
+// but it does not need to. Hue is derived from x/y position, which is what makes
+// it read as a diagonal lolcat sweep rather than a flat tint.
+function hueRGB(h: number): string {
+  const f = (n: number) => {
+    const k = (n + h / 60) % 6
+    const v = Math.max(0, Math.min(1, Math.min(k, 4 - k, 1)))
+    return Math.round(55 + 200 * v)
+      .toString(16)
+      .padStart(2, "0")
+  }
+  return `#${f(5)}${f(3)}${f(1)}`
+}
+
+/** Split a string into per-character spans, each tinted by its x/y position. */
+function rainbowSpans(text: string, y: number, xOffset = 0) {
+  return Array.from(text).map((ch, x) => (
+    <text fg={hueRGB(((x + xOffset) * 7 + y * 18) % 360)} selectable={false}>
+      {ch}
+    </text>
+  ))
+}
 const BLINK_MS = 2000
 
 // Boot splash: static (0 fps) marquee background painted as the renderer's
@@ -58,10 +82,8 @@ export function StartupLoading(props: { ready: () => boolean }) {
   return (
     <Show when={!props.ready()}>
       <box position="absolute" zIndex={5000} left={0} right={0} top={0} bottom={0} flexDirection="column">
-        {bg().map((line) => (
-          <text fg={FG} selectable={false}>
-            {line}
-          </text>
+        {bg().map((line, y) => (
+          <box flexDirection="row">{rainbowSpans(line, y)}</box>
         ))}
         <Show when={on()}>
           <box
@@ -76,10 +98,8 @@ export function StartupLoading(props: { ready: () => boolean }) {
           >
           <box backgroundColor="#000000" flexDirection="column">
             <text fg={FG} selectable={false}>{PAD}</text>
-            {ART.map((row) => (
-              <text fg={FG} selectable={false}>
-                {"  " + row + "  "}
-              </text>
+            {ART.map((row, y) => (
+              <box flexDirection="row">{rainbowSpans("  " + row + "  ", y + 2)}</box>
             ))}
             <text fg={FG} selectable={false}>{PAD}</text>
           </box>
