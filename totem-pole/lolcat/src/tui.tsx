@@ -59,4 +59,8 @@ const tui: TuiPlugin = async (api) => {
 }
 
 export { tui }
-export default tui
+// totem's plugin loader (readV1Plugin) requires the default export to be an
+// OBJECT carrying `tui`, not the bare function — a bare function fails its
+// isRecord() check and throws "must default export an object with tui()".
+// That mismatch is why this plugin silently never registered.
+export default { id: "lolcat-theme", tui }
