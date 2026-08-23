@@ -76,7 +76,28 @@ const cli = yargs(args)
     process.env.TOTEM = "1"
     process.env.TOTEM_PID = String(process.pid)
   })
-  .usage("")
+  .usage(
+    [
+      "totem — an AI coding agent whose rules live in the machinery, not the prompt.",
+      "",
+      "Usage:  totem [project]          start the interactive TUI (default)",
+      "        totem run <message>      one-shot prompt, prints to stdout",
+      "        totem <command> [args]",
+    ].join("\n"),
+  )
+  // Group the global flags so `--help` reads as sections instead of one flat
+  // wall. Everything not named here still shows under the default "Options".
+  .group(["help", "version"], "Getting started:")
+  .group(["model", "continue", "session", "agent"], "Session:")
+  .group(["print-logs", "log-level", "pure"], "Diagnostics:")
+  .group(["port", "hostname", "mdns", "mdns-domain", "cors"], "Server:")
+  .example("totem", "start the TUI in the current directory")
+  .example("totem run \"fix the failing test\"", "one-shot prompt, no TUI")
+  .example("totem run -c \"now add a test for it\"", "continue the previous session")
+  .example("totem providers", "add or switch API providers and credentials")
+  .example("totem models", "list every model available from your providers")
+  .example("totem --lolcat", "force the rainbow logo on for this session")
+  .epilogue("Docs: https://totem.alola.lol   ·   Source: https://github.com/nviiiivn/totem")
   .completion("completion", "generate shell completion script")
   .command(AcpCommand)
   .command(McpCommand)
