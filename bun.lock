@@ -343,6 +343,17 @@
         "typescript": "catalog:",
       },
     },
+    "totem-pole/cache-stats": {
+      "name": "@totem-ai/cache-stats",
+      "version": "0.0.0",
+      "dependencies": {
+        "@opentui/core": "catalog:",
+        "@opentui/solid": "catalog:",
+        "@totem-ai/plugin": "workspace:*",
+        "@totem-ai/sdk": "workspace:*",
+        "solid-js": "catalog:",
+      },
+    },
     "totem-pole/enterprise": {
       "name": "@totem-ai/enterprise",
       "version": "1.17.10",
@@ -445,6 +456,14 @@
       },
       "peerDependencies": {
         "zod": "^4.0.0",
+      },
+    },
+    "totem-pole/usage-monitor": {
+      "name": "@totem-ai/usage-monitor",
+      "version": "0.0.0",
+      "dependencies": {
+        "@opentui/solid": "catalog:",
+        "solid-js": "catalog:",
       },
     },
     "totem/cartridge": {
@@ -2733,6 +2752,8 @@
 
     "@totem-ai/app": ["@totem-ai/app@workspace:totem/totem-faces/app"],
 
+    "@totem-ai/cache-stats": ["@totem-ai/cache-stats@workspace:totem-pole/cache-stats"],
+
     "@totem-ai/cartridge": ["@totem-ai/cartridge@workspace:totem/cartridge"],
 
     "@totem-ai/cli": ["@totem-ai/cli@workspace:totem/cli"],
@@ -2796,6 +2817,8 @@
     "@totem-ai/tui": ["@totem-ai/tui@workspace:totem/totem-faces/tui"],
 
     "@totem-ai/ui": ["@totem-ai/ui@workspace:totem/totem-faces/ui"],
+
+    "@totem-ai/usage-monitor": ["@totem-ai/usage-monitor@workspace:totem-pole/usage-monitor"],
 
     "@totem-ai/web": ["@totem-ai/web@workspace:totem-ken/web"],
 
