@@ -151,6 +151,17 @@ async function openWithNodeSqlite(dbPath: string, mod: NodeSqliteModule): Promis
 }
 
 async function openWithBetterSqlite3(dbPath: string): Promise<SqliteConn> {
+  // VENDORED ADAPTATION (totem): better-sqlite3 is an OPTIONAL runtime backend
+  // and is not a dependency here, so a literal specifier makes tsc fail to
+  // resolve it. Going through a variable keeps the runtime behaviour identical
+  // (this is already inside a fallback chain) while leaving the module
+  // unresolved at type-check time, which is the honest description of it.
+  // VENDORED ADAPTATION (totem): better-sqlite3 is an OPTIONAL runtime backend,
+  // intentionally not installed — this call sits in a fallback chain and other
+  // sqlite drivers are tried first. It is marked external in script/build.ts so
+  // the bundler skips it; this silences the matching type-level resolution error
+  // rather than pretending the module is present.
+  // @ts-ignore -- optional peer, resolved at runtime only when actually present
   const mod = (await import("better-sqlite3")) as unknown as BetterSqlite3Module;
   const db = new mod.default(dbPath, { readonly: true });
 

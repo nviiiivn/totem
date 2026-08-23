@@ -169,7 +169,11 @@ for (const item of targets) {
     conditions: ["bun", "node"],
     tsconfig: "./tsconfig.json",
     plugins: [plugin],
-    external: ["node-gyp"],
+    // better-sqlite3 is an OPTIONAL runtime backend for the vendored quota
+    // panel (totem-pole/quota). It is deliberately not a dependency, and the
+    // code already falls back to other sqlite drivers, so keep the bundler from
+    // trying to resolve it.
+    external: ["node-gyp", "better-sqlite3"],
     format: "esm",
     minify: true,
     sourcemap: sourcemapsFlag ? "linked" : "none",

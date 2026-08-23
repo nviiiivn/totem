@@ -13,7 +13,5 @@
   // lolcat is NOT here: it is compiled in as a builtin
   // (feature-plugins/home/lolcat). As an external plugin it silently never
   // rendered — see that file's comment for why.
-  "plugin": [
-    "../totem-pole/quota"
-  ]
+  "plugin": []
 }

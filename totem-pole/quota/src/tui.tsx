@@ -818,13 +818,13 @@ async function runQuotaDialogCommandAsync(
           }
         : undefined,
       log: async (message, extra) => {
+        // VENDORED ADAPTATION (totem): totem's app.log takes the fields
+        // directly; upstream wrapped them in `body`.
         await api.client.app.log({
-          body: {
-            service: "quota-toast",
-            level: "debug",
-            message,
-            extra,
-          },
+          service: "quota-toast",
+          level: "debug",
+          message,
+          extra,
         });
       },
     });
