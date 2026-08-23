@@ -7,10 +7,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anomalyco/opencode.git",
+    "url": "git+https://github.com/nviiiivn/totem.git",
     "directory": "totem-adze/http-recorder"
   },
-  "homepage": "https://github.com/anomalyco/opencode/tree/dev/totem-adze/http-recorder",
+  "homepage": "https://github.com/nviiiivn/totem/tree/dev/totem-adze/http-recorder",
   "bugs": "https://github.com/anomalyco/opencode/issues",
   "keywords": [
     "effect",
