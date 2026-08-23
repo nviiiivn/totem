@@ -49,6 +49,7 @@ Tagline, from her own docs: *"Made of spite. Running locally. Answering to no on
 | Rainbow boot loading screen | `component/startup-loading.tsx` | was a hardcoded `#6d6d6d`; now per-character hue |
 | `--lolcat` / `--no-lolcat` flag | `cli/cmd/tui.ts` | appears in `--help`, both accepted |
 | Improved `--help` | `src/index.ts` | usage header, grouped sections, examples, epilogue |
+| **Install script** | `install` | ran end-to-end twice: downloads 143MB from the real public release, installs to default AND `TOTEM_INSTALL_DIR`, installed binary reports its version |
 
 > **NOT CONFIRMED BY THE USER.** All of the above is verified present in the binary, but nvii had not restarted `tot3m` to see them at time of writing. **First thing to do: restart and look.**
 
@@ -66,7 +67,33 @@ Tagline, from her own docs: *"Made of spite. Running locally. Answering to no on
 - **`publish.yml` can never run on this fork** — hardcoded `if: github.repository == 'anomalyco/totem'` plus missing secrets. Releases are built locally via `totem/script/build.ts` instead.
 - **5 scaffold READMEs still unwritten**: `totem/README.md` (literally `# js`), `totem-ken/web/`, `totem-ken/docs/`, `totem-pole/enterprise/`, `totem/totem-faces/app/`.
 - **`opencode-background-agents` is untraceable** — npm package with no repository/homepage/author; two candidate GitHub repos checked, neither matches. Don't vendor it blind.
-- **9 remaining npm plugins not yet vendored** (see §6).
+- **12 remaining npm plugins not yet vendored** (see §6).
+
+### Fixed 2026-08-23 (was a five-day day-one blocker)
+`install` was still 100% upstream's: `APP=opencode`, all URLs at
+`anomalyco/opencode`, target `$HOME/.opencode/bin`. **Following the README's
+install instructions installed OpenCode, not totem.** Four separate faults, all
+fixed and verified by running it: wrong name/repo/path; it expected `.tar.gz`
+archives while releases publish raw executables; version detection assumed
+`vX.Y.Z` non-prerelease tags while totem tags `dev-<stamp>` prereleases; and
+`TOTEM_INSTALL_DIR` was documented but ignored.
+
+**Lesson worth keeping:** this survived five days because nobody *ran* it.
+Reading code does not find this class of bug. Walk the new-user path — clone,
+install, launch, use — before assuming anything is shippable.
+
+### Upstream-leftover sweep (2026-08-23) — this class is now enumerated
+Swept every tracked file. Ten hits total, each inspected:
+- 2 fixed (http-recorder repo URL, desktop homepage/email) — cosmetic metadata
+- **`provider/totem.ts` -> `console.opencode.ai` is CORRECT. Do not "fix" it.**
+  That is genuinely OpenCode's hosted service and is where the `opencode` /
+  `opencode-go` models come from. Changing it breaks the provider.
+- **`.totem/totem.jsonc` `$schema` -> `opencode.ai/config.json` is CORRECT.**
+  It is a real, working schema URL providing editor autocomplete. Pointing it
+  at a totem URL that does not exist would only break that.
+- 2 are `dev:remote` scripts targeting OpenCode's hosted API/auth backends —
+  dev-only, no such services exist here, never run.
+- remainder are docs/patches with no runtime effect.
 
 ---
 
