@@ -78,7 +78,7 @@ const cli = yargs(args)
   })
   .usage(
     [
-      "totem — an AI coding agent whose rules live in the machinery, not the prompt.",
+      "totem — made of spite. Running locally. Answering to no one.",
       "",
       "Usage:  totem [project]          start the interactive TUI (default)",
       "        totem run <message>      one-shot prompt, prints to stdout",
