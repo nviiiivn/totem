@@ -1,0 +1,11 @@
+{
+  "name": "@totem-ai/usage-monitor",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { "./tui": "./tui.js" },
+  "dependencies": {
+    "@opentui/solid": "catalog:",
+    "solid-js": "catalog:"
+  }
+}

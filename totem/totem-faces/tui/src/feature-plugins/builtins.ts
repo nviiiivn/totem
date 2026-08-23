@@ -10,6 +10,8 @@ import SidebarMcp from "./sidebar/mcp"
 import SidebarTodo from "./sidebar/todo"
 import SidebarEnforcement from "./sidebar/enforcement"
 import SidebarQuota from "./sidebar/quota"
+import SidebarCacheStats from "./sidebar/cache-stats"
+import SidebarUsageMonitor from "./sidebar/usage-monitor"
 import DiffViewer from "./system/diff-viewer"
 import Notifications from "./system/notifications"
 import PluginManager from "./system/plugins"
@@ -32,6 +34,8 @@ export function createBuiltinPlugins(options: { experimentalEventSystem: boolean
     SidebarTodo,
     SidebarEnforcement,
     SidebarQuota,
+    SidebarCacheStats,
+    SidebarUsageMonitor,
     SidebarFiles,
     SidebarFooter,
     Notifications,
