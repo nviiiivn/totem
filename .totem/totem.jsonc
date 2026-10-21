@@ -1,0 +1,96 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {},
+  "permission": {},
+  // Relative path, not absolute: this resolves from the project root so it works
+  // for anyone who clones the repo, not just the machine it was authored on.
+  // npm plugins below are fetched on first run — this is the out-of-the-box set,
+  // not optional extras. Deliberately excluded: opencode-cache-stats (fails to
+  // load — "must default export an object with server()"; re-add when fixed).
+  "plugin": [
+    "./.totem/plugins/constitution-gate.ts",
+    // Vendored, not npm — see totem-pole/quota/VENDORED.md. Provider quota +
+    // token usage. In-repo so it keeps working if upstream moves or disappears.
+    "./totem-pole/quota",
+    // Vendored from the standalone lolcat-theme plugin — see totem-pole/lolcat/VENDORED.md.
+    // Animated rainbow logo; toggle with ctrl+l or the lolcat.toggle command.
+    "./totem-pole/lolcat",
+    "./.totem/plugins/session-transcript.mjs",
+    "opencode-mem",
+    "opencode-pty",
+    "opencode-worktree",
+    "opencode-local-ollama",
+    "opencode-usage-monitor",
+    "opencode-mystatus",
+    "opencode-token-tracker",
+    "opencode-telemetry",
+    "opencode-history-search",
+    "opencode-plan-manager",
+    "opencode-background-agents",
+    "opencode-adaptive-thinking",
+    "opencode-beads",
+    "opencode-froggy",
+  ],
+  "references": {
+    "effect": {
+      "repository": "github.com/Effect-TS/effect-smol",
+      "description": "Use for Effect v4 and effect-smol implementation details",
+    },
+    "totem-local": {
+      "path": "~/.local/share/totem",
+      "description": "Contains totem logs and data",
+    },
+  },
+  "mcp": {
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "@upstash/context7-mcp"],
+      "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "@playwright/mcp@latest"],
+      "enabled": true
+    },
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "sentry": {
+      "type": "local",
+      "command": ["npx", "-y", "@sentry/mcp-server"],
+      "enabled": true
+    },
+    "notion": {
+      "type": "local",
+      "command": ["npx", "-y", "@notionhq/notion-mcp-server"],
+      "enabled": true,
+      "environment": {
+        "NOTION_API_KEY": "${NOTION_API_KEY}"
+      }
+    },
+    "atlassian": {
+      "type": "local",
+      "command": ["npx", "-y", "mcp-atlassian"],
+      "enabled": true,
+      "environment": {
+        "ATLASSIAN_API_TOKEN": "${ATLASSIAN_API_TOKEN}",
+        "ATLASSIAN_EMAIL": "${ATLASSIAN_EMAIL}",
+        "ATLASSIAN_SITE": "${ATLASSIAN_SITE}"
+      }
+    },
+    "shadcn": {
+      "type": "local",
+      "command": ["npx", "-y", "shadcn-registry-mcp@latest"],
+      "enabled": true
+    }
+  },
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false,
+  },
+}

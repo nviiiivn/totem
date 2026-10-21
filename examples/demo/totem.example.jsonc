@@ -1,0 +1,54 @@
+// Demo user config for totem. Every value here is a placeholder.
+//
+// Use it without touching your real config:
+//   TOTEM_CONFIG=examples/nviiiivn/totem.example.jsonc bun run dev
+// or copy it to ~/.config/totem/totem.jsonc and edit.
+//
+// Hosts:
+//   localhost          an Ollama install on the machine running totem
+//   demo-server        192.0.2.10 (TEST-NET-1, RFC 5737): stands in for a GPU box on your LAN
+// Secrets are read from the environment with {env:VAR}; nothing is stored in this file.
+{
+  "model": "ollama-local/qwen3:8b",
+  "small_model": "ollama-local/qwen3:8b",
+  "provider": {
+    "ollama-local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (localhost)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1",
+        // Local models can be slow. Without these, long generations get cut off.
+        "timeout": 1800000,
+        "chunkTimeout": 600000
+      },
+      "models": {
+        "qwen3:8b": { "name": "Qwen3 8B" },
+        "llama3.1:8b": { "name": "Llama 3.1 8B" }
+      }
+    },
+    "demo-server": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (demo-server)",
+      "options": {
+        "baseURL": "http://192.0.2.10:11434/v1",
+        "timeout": 1800000,
+        "chunkTimeout": 600000
+      },
+      "models": {
+        "qwen3-coder:30b": { "name": "Qwen3 Coder 30B" },
+        "deepseek-ocr:3b": { "name": "DeepSeek OCR 3B (vision, used by the cartridge extractor)" }
+      }
+    },
+    "demo-cloud": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Demo cloud provider (OpenAI-compatible)",
+      "options": {
+        "baseURL": "https://api.example.com/v1",
+        "apiKey": "{env:DEMO_API_KEY}"
+      },
+      "models": {
+        "demo-large": { "name": "Demo Large" }
+      }
+    }
+  }
+}

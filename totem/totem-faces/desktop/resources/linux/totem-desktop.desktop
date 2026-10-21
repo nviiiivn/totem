@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Totem
+Exec=/opt/Totem/ai.totem.desktop %U
+Terminal=false
+Type=Application
+Icon=ai.totem.desktop
+StartupWMClass=ai.totem.desktop
+NoDisplay=true
+Comment=Open source AI coding agent
+Categories=Development;

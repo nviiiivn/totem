@@ -1,0 +1,33 @@
+{
+  "$schema": "https://v2-8-13.turborepo.dev/schema.json",
+  "globalEnv": ["CI", "TOTEM_DISABLE_SHARE"],
+  "globalPassThroughEnv": ["CI", "TOTEM_DISABLE_SHARE"],
+  "tasks": {
+    "typecheck": {},
+    "build": {
+      "dependsOn": [],
+      "outputs": ["dist/**"]
+    },
+    "@totem-ai/totem#test": {
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "passThroughEnv": ["*"]
+    },
+    "@totem-ai/core#test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "@totem-ai/app#test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "@totem-ai/tui#test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "@totem-ai/session-ui#test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    }
+  }
+}

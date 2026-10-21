@@ -1,0 +1,15 @@
+{
+  "name": "@totem-ai/lolcat",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./tui": "./src/tui.tsx"
+  },
+  "dependencies": {
+    "@opentui/core": "catalog:",
+    "@opentui/solid": "catalog:",
+    "solid-js": "catalog:",
+    "@opentui/keymap": "catalog:"
+  }
+}

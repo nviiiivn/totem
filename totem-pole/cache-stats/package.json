@@ -1,0 +1,14 @@
+{
+  "name": "@totem-ai/cache-stats",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { "./tui": "./src/index.tsx" },
+  "dependencies": {
+    "@opentui/core": "catalog:",
+    "@opentui/solid": "catalog:",
+    "@totem-ai/plugin": "workspace:*",
+    "@totem-ai/sdk": "workspace:*",
+    "solid-js": "catalog:"
+  }
+}

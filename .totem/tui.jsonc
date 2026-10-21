@@ -1,0 +1,17 @@
+{
+  // TUI plugins load from THIS file, not totem.jsonc — the TUI config loader
+  // reads `.totem/tui.{json,jsonc}` (ConfigPaths.fileInDirectory(dir, "tui")).
+  //
+  // Paths are relative to THIS FILE's directory (.totem/), not the project
+  // root — see resolvePluginSpec: `base = path.dirname(configFilepath)`.
+  // Hence the leading `../`. Using "./totem-pole/..." here silently resolves
+  // to ".totem/totem-pole/..." and the plugin never loads, with no error.
+  //
+  // Directories, not source files: the loader picks the TUI entrypoint out of
+  // each package.json's `exports["./tui"]`.
+  //
+  // lolcat is NOT here: it is compiled in as a builtin
+  // (feature-plugins/home/lolcat). As an external plugin it silently never
+  // rendered — see that file's comment for why.
+  "plugin": []
+}

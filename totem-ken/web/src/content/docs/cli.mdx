@@ -1,0 +1,732 @@
+---
+title: CLI
+description: Totem CLI options and commands.
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components"
+
+The Totem CLI by default starts the [TUI](/docs/tui) when run without any arguments.
+
+```bash
+totem
+```
+
+But it also accepts commands as documented on this page. This allows you to interact with Totem programmatically.
+
+```bash
+totem run "Explain how closures work in JavaScript"
+```
+
+---
+
+### tui
+
+Start the Totem terminal user interface.
+
+```bash
+totem [project]
+```
+
+#### Flags
+
+| Flag                                        | Short | Description                                                             |
+| ------------------------------------------- | ----- | ----------------------------------------------------------------------- |
+| <nobr><code>{"--continue"}</code></nobr>    | `-c`  | Continue the last session                                               |
+| <nobr><code>{"--session"}</code></nobr>     | `-s`  | Session ID to continue                                                  |
+| <nobr><code>{"--fork"}</code></nobr>        |       | Fork the session when continuing (use with `--continue` or `--session`) |
+| <nobr><code>{"--prompt"}</code></nobr>      |       | Prompt to use                                                           |
+| <nobr><code>{"--model"}</code></nobr>       | `-m`  | Model to use in the form of provider/model                              |
+| <nobr><code>{"--agent"}</code></nobr>       |       | Agent to use                                                            |
+| <nobr><code>{"--port"}</code></nobr>        |       | Port to listen on                                                       |
+| <nobr><code>{"--hostname"}</code></nobr>    |       | Hostname to listen on                                                   |
+| <nobr><code>{"--mdns"}</code></nobr>        |       | Enable mDNS discovery                                                   |
+| <nobr><code>{"--mdns-domain"}</code></nobr> |       | Custom mDNS domain name                                                 |
+| <nobr><code>{"--cors"}</code></nobr>        |       | Additional browser origin(s) to allow CORS                              |
+
+---
+
+## Commands
+
+The Totem CLI also has the following commands.
+
+---
+
+### agent
+
+Manage agents for Totem.
+
+```bash
+totem agent [command]
+```
+
+---
+
+#### create
+
+Create a new agent with custom configuration.
+
+```bash
+totem agent create
+```
+
+This command will guide you through creating a new agent with a custom system prompt and permission configuration. Anything you don't allow is denied in the generated agent's frontmatter.
+
+#### Flags
+
+| Flag                                        | Short | Description                                                                                                                                                                                                                |
+| ------------------------------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <nobr><code>{"--path"}</code></nobr>        |       | Directory to write the agent file to (defaults to global or `.totem/agent` based on the prompt)                                                                                                                         |
+| <nobr><code>{"--description"}</code></nobr> |       | What the agent should do                                                                                                                                                                                                   |
+| <nobr><code>{"--mode"}</code></nobr>        |       | Agent mode: `all`, `primary`, or `subagent`                                                                                                                                                                                |
+| <nobr><code>{"--permissions"}</code></nobr> |       | Comma-separated list of permissions to allow (default: all). Available: `bash`, `read`, `edit`, `glob`, `grep`, `webfetch`, `task`, `todowrite`, `websearch`, `lsp`, `skill`. Anything omitted is denied. Alias: `--tools` |
+| <nobr><code>{"--model"}</code></nobr>       | `-m`  | Model to use, in `provider/model` format                                                                                                                                                                                   |
+
+Passing all of `--path`, `--description`, `--mode`, and `--permissions` runs the command non-interactively.
+
+---
+
+#### list
+
+List all available agents.
+
+```bash
+totem agent list
+```
+
+---
+
+### attach
+
+Attach a terminal to an already running Totem backend server started via `serve` or `web` commands.
+
+```bash
+totem attach [url]
+```
+
+This allows using the TUI with a remote Totem backend. For example:
+
+```bash
+# Start the backend server for web/mobile access
+totem web --port 4096 --hostname 0.0.0.0
+
+# In another terminal, attach the TUI to the running backend
+totem attach http://10.20.30.40:4096
+```
+
+#### Flags
+
+| Flag                                     | Short | Description                                                                |
+| ---------------------------------------- | ----- | -------------------------------------------------------------------------- |
+| <nobr><code>{"--dir"}</code></nobr>      |       | Working directory to start TUI in                                          |
+| <nobr><code>{"--continue"}</code></nobr> | `-c`  | Continue the last session                                                  |
+| <nobr><code>{"--session"}</code></nobr>  | `-s`  | Session ID to continue                                                     |
+| <nobr><code>{"--fork"}</code></nobr>     |       | Fork the session when continuing (use with `--continue` or `--session`)    |
+| <nobr><code>{"--password"}</code></nobr> | `-p`  | Basic auth password (defaults to `TOTEM_SERVER_PASSWORD`)               |
+| <nobr><code>{"--username"}</code></nobr> | `-u`  | Basic auth username (defaults to `TOTEM_SERVER_USERNAME` or `totem`) |
+
+---
+
+### auth
+
+Command to manage credentials and login for providers.
+
+```bash
+totem auth [command]
+```
+
+---
+
+#### login
+
+Totem is powered by the provider list at [Models.dev](https://models.dev), so you can use `totem auth login` to configure API keys for any provider you'd like to use. This is stored in `~/.local/share/totem/auth.json`.
+
+```bash
+totem auth login
+```
+
+When Totem starts up it loads the providers from the credentials file. And if there are any keys defined in your environments or a `.env` file in your project.
+
+##### Flags
+
+| Flag                                     | Short | Description                                          |
+| ---------------------------------------- | ----- | ---------------------------------------------------- |
+| <nobr><code>{"--provider"}</code></nobr> | `-p`  | Provider ID or name to log in to                     |
+| <nobr><code>{"--method"}</code></nobr>   | `-m`  | Login method label to use, skipping method selection |
+
+---
+
+#### list
+
+Lists all the authenticated providers as stored in the credentials file.
+
+```bash
+totem auth list
+```
+
+Or the short version.
+
+```bash
+totem auth ls
+```
+
+---
+
+#### logout
+
+Logs you out of a provider by clearing it from the credentials file.
+
+```bash
+totem auth logout
+```
+
+---
+
+### github
+
+Manage the GitHub agent for repository automation.
+
+```bash
+totem github [command]
+```
+
+---
+
+#### install
+
+Install the GitHub agent in your repository.
+
+```bash
+totem github install
+```
+
+This sets up the necessary GitHub Actions workflow and guides you through the configuration process. [Learn more](/docs/github).
+
+---
+
+#### run
+
+Run the GitHub agent. This is typically used in GitHub Actions.
+
+```bash
+totem github run
+```
+
+##### Flags
+
+| Flag                                  | Description                            |
+| ------------------------------------- | -------------------------------------- |
+| <nobr><code>{"--event"}</code></nobr> | GitHub mock event to run the agent for |
+| <nobr><code>{"--token"}</code></nobr> | GitHub personal access token           |
+
+---
+
+### mcp
+
+Manage Model Context Protocol servers.
+
+```bash
+totem mcp [command]
+```
+
+---
+
+#### add
+
+Add an MCP server to your configuration.
+
+```bash
+totem mcp add
+```
+
+This command will guide you through adding either a local or remote MCP server.
+
+---
+
+#### list
+
+List all configured MCP servers and their connection status.
+
+```bash
+totem mcp list
+```
+
+Or use the short version.
+
+```bash
+totem mcp ls
+```
+
+---
+
+#### auth
+
+Authenticate with an OAuth-enabled MCP server.
+
+```bash
+totem mcp auth [name]
+```
+
+If you don't provide a server name, you'll be prompted to select from available OAuth-capable servers.
+
+You can also list OAuth-capable servers and their authentication status.
+
+```bash
+totem mcp auth list
+```
+
+Or use the short version.
+
+```bash
+totem mcp auth ls
+```
+
+---
+
+#### logout
+
+Remove OAuth credentials for an MCP server.
+
+```bash
+totem mcp logout [name]
+```
+
+---
+
+#### debug
+
+Debug OAuth connection issues for an MCP server.
+
+```bash
+totem mcp debug <name>
+```
+
+---
+
+### models
+
+List all available models from configured providers.
+
+```bash
+totem models [provider]
+```
+
+This command displays all models available across your configured providers in the format `provider/model`.
+
+This is useful for figuring out the exact model name to use in [your config](/docs/config/).
+
+You can optionally pass a provider ID to filter models by that provider.
+
+```bash
+totem models anthropic
+```
+
+#### Flags
+
+| Flag                                    | Description                                                  |
+| --------------------------------------- | ------------------------------------------------------------ |
+| <nobr><code>{"--refresh"}</code></nobr> | Refresh the models cache from models.dev                     |
+| <nobr><code>{"--verbose"}</code></nobr> | Use more verbose model output (includes metadata like costs) |
+
+Use the `--refresh` flag to update the cached model list. This is useful when new models have been added to a provider and you want to see them in Totem.
+
+```bash
+totem models --refresh
+```
+
+---
+
+### run
+
+Run totem in non-interactive mode by passing a prompt directly.
+
+```bash
+totem run [message..]
+```
+
+This is useful for scripting, automation, or when you want a quick answer without launching the full TUI. For example.
+
+```bash "totem run"
+totem run Explain the use of context in Go
+```
+
+You can also attach to a running `totem serve` instance to avoid MCP server cold boot times on every run:
+
+```bash
+# Start a headless server in one terminal
+totem serve
+
+# In another terminal, run commands that attach to it
+totem run --attach http://localhost:4096 "Explain async/await in JavaScript"
+```
+
+#### Flags
+
+| Flag                                                         | Short | Description                                                                |
+| ------------------------------------------------------------ | ----- | -------------------------------------------------------------------------- |
+| <nobr><code>{"--command"}</code></nobr>                      |       | The command to run, use message for args                                   |
+| <nobr><code>{"--continue"}</code></nobr>                     | `-c`  | Continue the last session                                                  |
+| <nobr><code>{"--session"}</code></nobr>                      | `-s`  | Session ID to continue                                                     |
+| <nobr><code>{"--fork"}</code></nobr>                         |       | Fork the session when continuing (use with `--continue` or `--session`)    |
+| <nobr><code>{"--share"}</code></nobr>                        |       | Share the session                                                          |
+| <nobr><code>{"--model"}</code></nobr>                        | `-m`  | Model to use in the form of provider/model                                 |
+| <nobr><code>{"--agent"}</code></nobr>                        |       | Agent to use                                                               |
+| <nobr><code>{"--file"}</code></nobr>                         | `-f`  | File(s) to attach to message                                               |
+| <nobr><code>{"--format"}</code></nobr>                       |       | Format: default (formatted) or json (raw JSON events)                      |
+| <nobr><code>{"--title"}</code></nobr>                        |       | Title for the session (uses truncated prompt if no value provided)         |
+| <nobr><code>{"--attach"}</code></nobr>                       |       | Attach to a running totem server (e.g., http://localhost:4096)          |
+| <nobr><code>{"--password"}</code></nobr>                     | `-p`  | Basic auth password (defaults to `TOTEM_SERVER_PASSWORD`)               |
+| <nobr><code>{"--username"}</code></nobr>                     | `-u`  | Basic auth username (defaults to `TOTEM_SERVER_USERNAME` or `totem`) |
+| <nobr><code>{"--dir"}</code></nobr>                          |       | Directory to run in, or path on the remote server when attaching           |
+| <nobr><code>{"--port"}</code></nobr>                         |       | Port for the local server (defaults to random port)                        |
+| <nobr><code>{"--variant"}</code></nobr>                      |       | Model variant (provider-specific reasoning effort)                         |
+| <nobr><code>{"--thinking"}</code></nobr>                     |       | Show thinking blocks                                                       |
+| <nobr><code>{"--dangerously-skip-permissions"}</code></nobr> |       | Auto-approve permissions that are not explicitly denied (dangerous!)       |
+
+---
+
+### serve
+
+Start a headless Totem server for API access. Check out the [server docs](/docs/server) for the full HTTP interface.
+
+```bash
+totem serve
+```
+
+This starts an HTTP server that provides API access to totem functionality without the TUI interface. Set `TOTEM_SERVER_PASSWORD` to enable HTTP basic auth (username defaults to `totem`).
+
+#### Flags
+
+| Flag                                        | Description                                |
+| ------------------------------------------- | ------------------------------------------ |
+| <nobr><code>{"--port"}</code></nobr>        | Port to listen on                          |
+| <nobr><code>{"--hostname"}</code></nobr>    | Hostname to listen on                      |
+| <nobr><code>{"--mdns"}</code></nobr>        | Enable mDNS discovery                      |
+| <nobr><code>{"--mdns-domain"}</code></nobr> | Custom mDNS domain name                    |
+| <nobr><code>{"--cors"}</code></nobr>        | Additional browser origin(s) to allow CORS |
+
+---
+
+### session
+
+Manage Totem sessions.
+
+```bash
+totem session [command]
+```
+
+---
+
+#### list
+
+List all Totem sessions.
+
+```bash
+totem session list
+```
+
+##### Flags
+
+| Flag                                      | Short | Description                          |
+| ----------------------------------------- | ----- | ------------------------------------ |
+| <nobr><code>{"--max-count"}</code></nobr> | `-n`  | Limit to N most recent sessions      |
+| <nobr><code>{"--format"}</code></nobr>    |       | Output format: table or json (table) |
+
+---
+
+#### delete
+
+Delete an Totem session.
+
+```bash
+totem session delete <sessionID>
+```
+
+---
+
+### stats
+
+Show token usage and cost statistics for your Totem sessions.
+
+```bash
+totem stats
+```
+
+#### Flags
+
+| Flag                                    | Description                                                                 |
+| --------------------------------------- | --------------------------------------------------------------------------- |
+| <nobr><code>{"--days"}</code></nobr>    | Show stats for the last N days (all time)                                   |
+| <nobr><code>{"--tools"}</code></nobr>   | Number of tools to show (all)                                               |
+| <nobr><code>{"--models"}</code></nobr>  | Show model usage breakdown (hidden by default). Pass a number to show top N |
+| <nobr><code>{"--project"}</code></nobr> | Filter by project (all projects, empty string: current project)             |
+
+---
+
+### export
+
+Export session data as JSON.
+
+```bash
+totem export [sessionID]
+```
+
+If you don't provide a session ID, you'll be prompted to select from available sessions.
+
+#### Flags
+
+| Flag                                     | Description                           |
+| ---------------------------------------- | ------------------------------------- |
+| <nobr><code>{"--sanitize"}</code></nobr> | Redact sensitive transcript/file data |
+
+---
+
+### import
+
+Import session data from a JSON file or Totem share URL.
+
+```bash
+totem import <file>
+```
+
+You can import from a local file or an Totem share URL.
+
+```bash
+totem import session.json
+totem import https://opncd.ai/s/abc123
+```
+
+---
+
+### web
+
+Start a headless Totem server with a web interface.
+
+```bash
+totem web
+```
+
+This starts an HTTP server and opens a web browser to access Totem through a web interface. Set `TOTEM_SERVER_PASSWORD` to enable HTTP basic auth (username defaults to `totem`).
+
+#### Flags
+
+| Flag                                        | Description                                |
+| ------------------------------------------- | ------------------------------------------ |
+| <nobr><code>{"--port"}</code></nobr>        | Port to listen on                          |
+| <nobr><code>{"--hostname"}</code></nobr>    | Hostname to listen on                      |
+| <nobr><code>{"--mdns"}</code></nobr>        | Enable mDNS discovery                      |
+| <nobr><code>{"--mdns-domain"}</code></nobr> | Custom mDNS domain name                    |
+| <nobr><code>{"--cors"}</code></nobr>        | Additional browser origin(s) to allow CORS |
+
+---
+
+### acp
+
+Start an ACP (Agent Client Protocol) server.
+
+```bash
+totem acp
+```
+
+This command starts an ACP server that communicates via stdin/stdout using nd-JSON.
+
+#### Flags
+
+| Flag                                        | Description                                |
+| ------------------------------------------- | ------------------------------------------ |
+| <nobr><code>{"--cwd"}</code></nobr>         | Working directory                          |
+| <nobr><code>{"--port"}</code></nobr>        | Port to listen on                          |
+| <nobr><code>{"--hostname"}</code></nobr>    | Hostname to listen on                      |
+| <nobr><code>{"--mdns"}</code></nobr>        | Enable mDNS discovery                      |
+| <nobr><code>{"--mdns-domain"}</code></nobr> | Custom mDNS domain name                    |
+| <nobr><code>{"--cors"}</code></nobr>        | Additional browser origin(s) to allow CORS |
+
+---
+
+### plugin
+
+Install a plugin and update your config.
+
+```bash
+totem plugin <module>
+```
+
+Or use the alias.
+
+```bash
+totem plug <module>
+```
+
+#### Flags
+
+| Flag                                   | Short | Description                     |
+| -------------------------------------- | ----- | ------------------------------- |
+| <nobr><code>{"--global"}</code></nobr> | `-g`  | Install in global config        |
+| <nobr><code>{"--force"}</code></nobr>  | `-f`  | Replace existing plugin version |
+
+---
+
+### pr
+
+Fetch and checkout a GitHub PR branch, then run Totem.
+
+```bash
+totem pr <number>
+```
+
+---
+
+### db
+
+Database tools.
+
+```bash
+totem db [query]
+```
+
+#### Flags
+
+| Flag                                   | Description                    |
+| -------------------------------------- | ------------------------------ |
+| <nobr><code>{"--format"}</code></nobr> | Output format: `json` or `tsv` |
+
+---
+
+#### path
+
+Print the database path.
+
+```bash
+totem db path
+```
+
+---
+
+### debug
+
+Debugging and troubleshooting tools.
+
+```bash
+totem debug [command]
+```
+
+---
+
+### uninstall
+
+Uninstall Totem and remove all related files.
+
+```bash
+totem uninstall
+```
+
+#### Flags
+
+| Flag                                        | Short | Description                                 |
+| ------------------------------------------- | ----- | ------------------------------------------- |
+| <nobr><code>{"--keep-config"}</code></nobr> | `-c`  | Keep configuration files                    |
+| <nobr><code>{"--keep-data"}</code></nobr>   | `-d`  | Keep session data and snapshots             |
+| <nobr><code>{"--dry-run"}</code></nobr>     |       | Show what would be removed without removing |
+| <nobr><code>{"--force"}</code></nobr>       | `-f`  | Skip confirmation prompts                   |
+
+---
+
+### upgrade
+
+Updates totem to the latest version or a specific version.
+
+```bash
+totem upgrade [target]
+```
+
+To upgrade to the latest version.
+
+```bash
+totem upgrade
+```
+
+To upgrade to a specific version.
+
+```bash
+totem upgrade v0.1.48
+```
+
+#### Flags
+
+| Flag                                   | Short | Description                                                       |
+| -------------------------------------- | ----- | ----------------------------------------------------------------- |
+| <nobr><code>{"--method"}</code></nobr> | `-m`  | The installation method that was used; curl, npm, pnpm, bun, brew |
+
+---
+
+## Global Flags
+
+The totem CLI takes the following global flags.
+
+| Flag                                       | Short | Description                          |
+| ------------------------------------------ | ----- | ------------------------------------ |
+| <nobr><code>{"--help"}</code></nobr>       | `-h`  | Display help                         |
+| <nobr><code>{"--version"}</code></nobr>    | `-v`  | Print version number                 |
+| <nobr><code>{"--print-logs"}</code></nobr> |       | Print logs to stderr                 |
+| <nobr><code>{"--log-level"}</code></nobr>  |       | Log level (DEBUG, INFO, WARN, ERROR) |
+| <nobr><code>{"--pure"}</code></nobr>       |       | Run without external plugins         |
+
+---
+
+## Environment variables
+
+Totem can be configured using environment variables.
+
+| Variable                              | Type    | Description                                       |
+| ------------------------------------- | ------- | ------------------------------------------------- |
+| `TOTEM_AUTO_SHARE`                 | boolean | Automatically share sessions                      |
+| `TOTEM_GIT_BASH_PATH`              | string  | Path to Git Bash executable on Windows            |
+| `TOTEM_CONFIG`                     | string  | Path to config file                               |
+| `TOTEM_TUI_CONFIG`                 | string  | Path to TUI config file                           |
+| `TOTEM_CONFIG_DIR`                 | string  | Path to config directory                          |
+| `TOTEM_CONFIG_CONTENT`             | string  | Inline json config content                        |
+| `TOTEM_DISABLE_AUTOUPDATE`         | boolean | Disable automatic update checks                   |
+| `TOTEM_DISABLE_PRUNE`              | boolean | Disable pruning of old data                       |
+| `TOTEM_DISABLE_TERMINAL_TITLE`     | boolean | Disable automatic terminal title updates          |
+| `TOTEM_PERMISSION`                 | string  | Inlined json permissions config                   |
+| `TOTEM_DISABLE_DEFAULT_PLUGINS`    | boolean | Disable default plugins                           |
+| `TOTEM_DISABLE_LSP_DOWNLOAD`       | boolean | Disable automatic LSP server downloads            |
+| `TOTEM_ENABLE_EXPERIMENTAL_MODELS` | boolean | Enable experimental models                        |
+| `TOTEM_DISABLE_AUTOCOMPACT`        | boolean | Disable automatic context compaction              |
+| `TOTEM_DISABLE_CLAUDE_CODE`        | boolean | Disable reading from `.claude` (prompt + skills)  |
+| `TOTEM_DISABLE_CLAUDE_CODE_PROMPT` | boolean | Disable reading `~/.claude/CLAUDE.md`             |
+| `TOTEM_DISABLE_CLAUDE_CODE_SKILLS` | boolean | Disable loading `.claude/skills`                  |
+| `TOTEM_DISABLE_MODELS_FETCH`       | boolean | Disable fetching models from remote sources       |
+| `TOTEM_DISABLE_MOUSE`              | boolean | Disable mouse capture in the TUI                  |
+| `TOTEM_FAKE_VCS`                   | string  | Fake VCS provider for testing purposes            |
+| `TOTEM_CLIENT`                     | string  | Client identifier (defaults to `cli`)             |
+| `TOTEM_ENABLE_EXA`                 | boolean | Enable Exa web search tools                       |
+| `TOTEM_SERVER_PASSWORD`            | string  | Enable basic auth for `serve`/`web`               |
+| `TOTEM_SERVER_USERNAME`            | string  | Override basic auth username (default `totem`) |
+| `TOTEM_MODELS_URL`                 | string  | Custom URL for fetching models configuration      |
+
+---
+
+### Experimental
+
+These environment variables enable experimental features that may change or be removed.
+
+| Variable                                        | Type    | Description                             |
+| ----------------------------------------------- | ------- | --------------------------------------- |
+| `TOTEM_EXPERIMENTAL`                         | boolean | Enable the experimental umbrella flag   |
+| `TOTEM_EXPERIMENTAL_ICON_DISCOVERY`          | boolean | Enable icon discovery                   |
+| `TOTEM_EXPERIMENTAL_DISABLE_COPY_ON_SELECT`  | boolean | Disable copy on select in TUI           |
+| `TOTEM_EXPERIMENTAL_BASH_DEFAULT_TIMEOUT_MS` | number  | Default timeout for bash commands in ms |
+| `TOTEM_EXPERIMENTAL_OUTPUT_TOKEN_MAX`        | number  | Max output tokens for LLM responses     |
+| `TOTEM_EXPERIMENTAL_FILEWATCHER`             | boolean | Enable file watcher for entire dir      |
+| `TOTEM_EXPERIMENTAL_OXFMT`                   | boolean | Enable oxfmt formatter                  |
+| `TOTEM_EXPERIMENTAL_LSP_TOOL`                | boolean | Enable experimental LSP tool            |
+| `TOTEM_EXPERIMENTAL_DISABLE_FILEWATCHER`     | boolean | Disable file watcher                    |
+| `TOTEM_EXPERIMENTAL_EXA`                     | boolean | Enable experimental Exa features        |
+| `TOTEM_EXPERIMENTAL_LSP_TY`                  | boolean | Enable TY LSP for python files          |
+| `TOTEM_EXPERIMENTAL_PLAN_MODE`               | boolean | Enable plan mode                        |
+| `TOTEM_EXPERIMENTAL_BACKGROUND_SUBAGENTS`    | boolean | Enable background subagent tasks        |
+| `TOTEM_EXPERIMENTAL_EVENT_SYSTEM`            | boolean | Enable experimental event system        |
+| `TOTEM_EXPERIMENTAL_NATIVE_LLM`              | boolean | Enable native LLM request path          |
+| `TOTEM_EXPERIMENTAL_PARALLEL`                | boolean | Enable parallel web search execution    |
+| `TOTEM_EXPERIMENTAL_SCOUT`                   | boolean | Enable Scout subagent                   |
+| `TOTEM_EXPERIMENTAL_WORKSPACES`              | boolean | Enable workspace support                |
